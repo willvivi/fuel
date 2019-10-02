@@ -1,7 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export const Fuels: string[] = ["Gazole", "SP95", "E85", "GPLc", "E10", "SP98"];
-
 interface IServices {
   service: string[];
 }
@@ -32,9 +30,9 @@ const GasStationSchema: Schema = new Schema({
   cp: String,
   pop: String,
   adresse: String,
-  ville: String,
-  services: JSON,
-  prix: JSON,
+  ville: JSON, // TODO Solve why it has to be a JSON ?
+  services: JSON, // TODO Submodels https://github.com/VictorPichon/gwent-decks/blob/master/api/models/cards.js
+  prix: JSON, // TODO Submodels https://github.com/VictorPichon/gwent-decks/blob/master/api/models/cards.js
 });
 
 const GasStation = mongoose.model<IGasStation>("GasStation", GasStationSchema);

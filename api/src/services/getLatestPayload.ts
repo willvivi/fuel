@@ -19,61 +19,100 @@ const getCurrentDate = (): string => {
 const path = `./extracts/fuel${getCurrentDate()}.zip`;
 const outputDir = `./extracts/fuel_${getCurrentDate()}/`;
 
-const downloadAndExtractLatestPayload = async (): Promise<any> => {
+// TODO: use an actual logging solution (eg. winston).
+
+const downloadAndExtractLatestPayload = async (): Promise<string> => {
+  console.log("Launching job: Gas Station collection update");
   const master = fs.createWriteStream(path);
   const url = "https://donnees.roulez-eco.fr/opendata/instantane";
-  const response = await axios({
-    method: "GET",
-    responseType: "stream",
-    url,
-  });
-
-  response.data.pipe(master);
 
   return new Promise((resolve, reject) => {
+    console.log("Getting latest archive from prix-carburants.gouv.fr...");
+    axios({
+      method: "GET",
+      responseType: "stream",
+      url,
+    })
+      .then(response => {
+        response.data.pipe(master);
+      })
+      .catch(err => {
+        console.error(err);
+        reject("Couldn't fetch xml payload from prix-carburants.gouv.fr");
+      });
     master.on("finish", () => {
+      console.log("Finished downloading. Unzipping...");
       const zip = new admZip(path);
+      // TODO Simplify code by calling fs methods from here
       try {
         ensureDirSync(outputDir);
       } catch (err) {
         console.error(err);
-        reject();
+        reject(
+          "Filesystem error. This is a server issue, please contact the administrator"
+        );
       }
       zip.extractAllTo(outputDir, true);
       try {
         ensureUnlinkSync(path);
       } catch (err) {
         console.error(err);
-        reject();
+        reject(
+          "Filesystem error. This is a server issue, please contact the administrator"
+        );
       }
-      storeInDB(xml2Object())
-        .then(() => {
-          resolve();
+      xml2Object()
+        .then(gasStations => {
+          console.log(
+            "Dropping any existing data from gasstation collection..."
+          );
+          GasStation.deleteMany({}, err => {
+            if (err !== null) {
+              console.error(err);
+              reject("Failed to empty collection");
+            }
+            console.log("Dropped gasstations collection successfully.");
+            console.log(
+              "Populating gasstations collection from the latest xml dump..."
+            );
+            GasStation.insertMany(gasStations, (error, docs) => {
+              if (err !== null) {
+                console.error("err ", error);
+                reject("Database update failed.");
+              }
+              console.log("Database successfully updated");
+              resolve("Database successfully updated");
+            });
+          });
         })
-        .catch(() => {
-          // reject();
+        .catch(err => {
+          reject("Couldn't parse XML");
         });
-      resolve();
     });
+
     master.on("error", reject);
   });
 };
 
-const xml2Object = (): IGasStation[] => {
+const xml2Object = (): Promise<IGasStation[]> => {
   let xmlBuffer: Buffer;
-  console.log("Reading file: ", outputDir + "PrixCarburants_instantane.xml");
-  try {
-    xmlBuffer = ensureReadFileSync(outputDir + "PrixCarburants_instantane.xml");
-  } catch (err) {
-    console.error(err);
-  }
-
-  const json: any = parser.toJson(xmlBuffer.toString());
-  return JSON.parse(json).pdv_liste.pdv;
-};
-
-const storeInDB = (stations: IGasStation[]): Promise<IGasStation[]> => {
-  return GasStation.insertMany(stations);
+  console.log(
+    "Parsing XML file: ",
+    outputDir + "PrixCarburants_instantane.xml"
+  );
+  return new Promise((resolve, reject) => {
+    try {
+      xmlBuffer = ensureReadFileSync(
+        outputDir + "PrixCarburants_instantane.xml"
+      );
+    } catch (err) {
+      console.error(err);
+      reject();
+    }
+    const json: any = parser.toJson(xmlBuffer.toString("latin1"));
+    console.log("Parsing done.");
+    resolve(JSON.parse(json).pdv_liste.pdv);
+  });
 };
 
 const ensureDirSync = (dirpath: string) => {
