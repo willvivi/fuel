@@ -1,12 +1,12 @@
 import admZip from "adm-zip";
 import axios from "axios";
 import fs from "fs";
-import xml2js from "xml2js";
-import GasStation from "../models/GasStation";
+import parser from "xml2json";
+import GasStation, { IGasStation } from "../models/GasStation";
 
 const getCurrentDate = (): string => {
   const date = new Date();
-  date.setDate(date.getDate() - 1);
+
   const currentDay =
     date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   const currentMonth =
@@ -46,13 +46,12 @@ const downloadAndExtractLatestPayload = async (): Promise<any> => {
         console.error(err);
         reject();
       }
-      xml2Object()
-        .then(res => {
-          console.log(res);
+      storeInDB(xml2Object())
+        .then(() => {
+          resolve();
         })
-        .catch(err => {
-          console.error(err);
-          reject();
+        .catch(() => {
+          // reject();
         });
       resolve();
     });
@@ -60,8 +59,7 @@ const downloadAndExtractLatestPayload = async (): Promise<any> => {
   });
 };
 
-const xml2Object = (): Promise<any> => {
-  const parser = new xml2js.Parser();
+const xml2Object = (): IGasStation[] => {
   let xmlBuffer: Buffer;
   console.log("Reading file: ", outputDir + "PrixCarburants_instantane.xml");
   try {
@@ -70,17 +68,12 @@ const xml2Object = (): Promise<any> => {
     console.error(err);
   }
 
-  return new Promise((resolve, reject) => {
-    parser.parseString(xmlBuffer, (err: any, result: any) => {
-      if (err) {
-        console.error(err);
-        reject();
-      }
-      resolve(result["pdv_liste"]["pdv"]);
+  const json: any = parser.toJson(xmlBuffer.toString());
+  return JSON.parse(json).pdv_liste.pdv;
+};
 
-      console.log("Done");
-    });
-  });
+const storeInDB = (stations: IGasStation[]): Promise<IGasStation[]> => {
+  return GasStation.insertMany(stations);
 };
 
 const ensureDirSync = (dirpath: string) => {

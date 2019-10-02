@@ -1,29 +1,40 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-const Fuels: string[] = ["Gazole", "SP95", "E85", "GPLc", "E10", "SP98"];
+export const Fuels: string[] = ["Gazole", "SP95", "E85", "GPLc", "E10", "SP98"];
 
-interface IService {
-  Title: string;
+interface IServices {
+  service: string[];
 }
 
 interface IFuel {
-  title?: string;
+  nom: string;
   id: number;
-  price: number;
+  maj: string;
+  valeur: number;
 }
 
 export interface IGasStation extends Document {
-  Address: string;
-  City: string;
-  Services: IService[];
-  Fuels: IFuel[];
+  id: string;
+  latitude: string;
+  longitude: string;
+  cp: string;
+  pop: string;
+  adresse: string;
+  ville: string;
+  services: IServices;
+  prix: IFuel[];
 }
 
 const GasStationSchema: Schema = new Schema({
-  Address: String,
-  City: String,
-  Fuels: JSON,
-  Services: JSON,
+  id: String,
+  latitude: String,
+  longitude: String,
+  cp: String,
+  pop: String,
+  adresse: String,
+  ville: String,
+  services: JSON,
+  prix: JSON,
 });
 
 const GasStation = mongoose.model<IGasStation>("GasStation", GasStationSchema);
