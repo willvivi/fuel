@@ -75,8 +75,22 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
             console.log(
               "Populating gasstations collection from the latest xml dump..."
             );
-            // TODO Foreach GeoJSON
-            GasStation.insertMany(gasStations, (error, docs) => {
+            const gasStationsWithGeoJSON = gasStations.map(
+              (gasStation: IGasStation) => {
+                return {
+                  location: {
+                    coordinates: [
+                      parseInt(gasStation.longitude, 10) / 100000,
+                      parseInt(gasStation.latitude, 10) / 100000,
+                    ],
+                    type: "Point",
+                  },
+                  ...gasStation,
+                };
+              }
+            );
+            console.log(gasStationsWithGeoJSON[0]);
+            GasStation.insertMany(gasStationsWithGeoJSON, error => {
               if (err !== null) {
                 console.error("err ", error);
                 reject("Database update failed.");
