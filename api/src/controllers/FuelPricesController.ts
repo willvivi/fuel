@@ -1,6 +1,10 @@
 import downloadAndExtractLatestPayload from "../services/PayloadService";
-import { getFuelPricesByCity } from "../services/FuelPricesService";
+import {
+  getFuelPricesByCity as getByCity,
+  getFuelPricesAround as getAround,
+} from "../services/FuelPricesService";
 import { Response, Request } from "express";
+import { parse } from "querystring";
 
 export const getFuelPricesFromGov = (req: Request, res: Response) => {
   downloadAndExtractLatestPayload()
@@ -14,7 +18,7 @@ export const getFuelPricesFromGov = (req: Request, res: Response) => {
 
 export const getFuelPricesFromCity = (req: Request, res: Response) => {
   if (req.body.city) {
-    getFuelPricesByCity(req.body.city)
+    getByCity(req.body.city)
       .then(gasStations => {
         res.send(gasStations);
       })
@@ -27,8 +31,11 @@ export const getFuelPricesFromCity = (req: Request, res: Response) => {
 };
 
 export const getFuelPricesAround = (req: Request, res: Response) => {
-  if (req.body.location) {
-    getFuelPricesByCity(req.body.location)
+  if (req.body.longitude && req.body.latitude) {
+    getAround(
+      [parseFloat(req.body.latitude), parseFloat(req.body.longitude)],
+      req.body.radius ? parseInt(req.body.radius, 10) : 20
+    )
       .then(gasStations => {
         res.send(gasStations);
       })

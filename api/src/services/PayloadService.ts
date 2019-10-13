@@ -80,8 +80,8 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 return {
                   location: {
                     coordinates: [
-                      parseInt(gasStation.longitude, 10) / 100000,
                       parseInt(gasStation.latitude, 10) / 100000,
+                      parseInt(gasStation.longitude, 10) / 100000,
                     ],
                     type: "Point",
                   },
@@ -89,7 +89,6 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 };
               }
             );
-            console.log(gasStationsWithGeoJSON[0]);
             GasStation.insertMany(gasStationsWithGeoJSON, error => {
               if (err !== null) {
                 console.error("err ", error);
