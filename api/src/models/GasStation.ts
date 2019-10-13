@@ -11,7 +11,7 @@ interface IFuel {
   valeur: number;
 }
 
-export interface IGeoJSON {
+interface IGeoJSON {
   type: string[];
   coordinates: number[];
 }
@@ -29,7 +29,7 @@ export interface IGasStation extends Document {
   prix: IFuel[];
 }
 
-const PointSchema = new mongoose.Schema({
+const LocationSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ["Point"],
@@ -41,17 +41,43 @@ const PointSchema = new mongoose.Schema({
   },
 });
 
+const ServicesSchema = new mongoose.Schema({
+  service: {
+    type: [String],
+    required: true,
+  },
+});
+
+const FuelSchema = new mongoose.Schema({
+  nom: {
+    type: String,
+    required: true,
+  },
+  id: {
+    type: Number,
+    required: true,
+  },
+  maj: {
+    type: Date,
+    required: true,
+  },
+  valeur: {
+    type: Number,
+    required: true,
+  },
+});
+
 const GasStationSchema: Schema = new Schema({
-  id: String,
-  latitude: String,
-  longitude: String,
-  location: PointSchema,
+  id: Number,
+  latitude: Number,
+  longitude: Number,
+  location: LocationSchema,
   cp: String,
   pop: String,
   adresse: String,
   ville: JSON, // TODO Solve why it has to be a JSON ?
-  services: JSON, // TODO Submodels https://github.com/VictorPichon/gwent-decks/blob/master/api/models/cards.js
-  prix: JSON, // TODO Submodels https://github.com/VictorPichon/gwent-decks/blob/master/api/models/cards.js
+  services: ServicesSchema,
+  prix: [FuelSchema],
 });
 
 const GasStation = mongoose.model<IGasStation>("GasStation", GasStationSchema);

@@ -1,4 +1,4 @@
-import GasStation, { IGasStation, IGeoJSON } from "../models/GasStation";
+import GasStation, { IGasStation } from "../models/GasStation";
 
 export const getFuelPricesByCity = async (
   city: string
@@ -21,7 +21,6 @@ export const getFuelPricesAround = async (
   location: number[],
   radius: number
 ): Promise<IGasStation[]> => {
-  console.log(location);
   return new Promise((resolve, reject) => {
     GasStation.find(
       {
