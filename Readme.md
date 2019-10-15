@@ -12,6 +12,7 @@ Straightforward API built on Node with TypeScript and Express.js.
 - Build a simple user friendly front page allowing to request the API trough a dynamic form or geolocation.
 - Dockerize the API, MongoDB and the front
 - Clean out some keys of the object returned by the API (rough latitude, longitude...)
+- Write tests for the API (TDD unfortunately not applied as I didn't have a clear idea of the features)
 
 ## Instructions
 
