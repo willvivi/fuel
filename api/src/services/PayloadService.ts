@@ -20,8 +20,6 @@ const getCurrentDate = (): string => {
 const path = `./extracts/fuel${getCurrentDate()}.zip`;
 const outputDir = `./extracts/fuel_${getCurrentDate()}/`;
 
-// TODO: use an actual logging solution (eg. winston).
-
 const downloadAndExtractLatestPayload = async (): Promise<string> => {
   console.log("Launching job: Gas Station collection update");
   const master = fs.createWriteStream(path);
@@ -44,7 +42,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
     master.on("finish", () => {
       console.log("Finished downloading. Unzipping...");
       const zip = new admZip(path);
-      // TODO Simplify code by calling fs methods from here
+
       try {
         ensureDirSync(outputDir);
       } catch (err) {
@@ -79,7 +77,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
             const gasStationsWithGeoJSONAndNames = gasStations.map(
               (gasStation: IGasStation) => {
                 const name = stations_2018.find(station => {
-                    return parseInt(gasStation.id, 10) === station.id;
+                  return parseInt(gasStation.id, 10) === station.id;
                 });
                 return {
                   nom: name ? name.Nom : "N/A",

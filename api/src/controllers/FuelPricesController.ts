@@ -4,7 +4,6 @@ import {
   getFuelPricesAround as getAround,
 } from "../services/FuelPricesService";
 import { Response, Request } from "express";
-import { parse } from "querystring";
 
 export const getFuelPricesFromGov = (req: Request, res: Response) => {
   downloadAndExtractLatestPayload()

@@ -73,11 +73,11 @@ const GasStationSchema: Schema = new Schema({
   id: Number,
   nom: {
     type: String,
-    required: false
+    required: false,
   },
   marque: {
     type: String,
-    required: false
+    required: false,
   },
   latitude: Number,
   longitude: Number,
@@ -85,7 +85,7 @@ const GasStationSchema: Schema = new Schema({
   cp: String,
   pop: String,
   adresse: String,
-  ville: JSON, // TODO Solve why it has to be a JSON ?
+  ville: JSON,
   services: ServicesSchema,
   prix: [FuelSchema],
 });
