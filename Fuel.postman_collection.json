@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "72548af2-8992-420b-813c-a93562e477a8",
+		"name": "Fuel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Latest Payload",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/fuel/getFuelPricesFromGov",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fuel",
+						"getFuelPricesFromGov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get City",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "city",
+							"value": "Paris",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/fuel/getFuelPricesByCity",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fuel",
+						"getFuelPricesByCity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Coordinates",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "latitude",
+							"value": "48.981387",
+							"type": "text"
+						},
+						{
+							"key": "longitude",
+							"value": "2.006150",
+							"type": "text"
+						},
+						{
+							"key": "radius",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/fuel/getFuelPricesAround",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fuel",
+						"getFuelPricesAround"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
