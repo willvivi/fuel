@@ -18,6 +18,8 @@ interface IGeoJSON {
 
 export interface IGasStation extends Document {
   id: string;
+  nom?: string;
+  marque?: string;
   latitude: string;
   longitude: string;
   location?: IGeoJSON;
@@ -69,6 +71,14 @@ const FuelSchema = new mongoose.Schema({
 
 const GasStationSchema: Schema = new Schema({
   id: Number,
+  nom: {
+    type: String,
+    required: false
+  },
+  marque: {
+    type: String,
+    required: false
+  },
   latitude: Number,
   longitude: Number,
   location: LocationSchema,

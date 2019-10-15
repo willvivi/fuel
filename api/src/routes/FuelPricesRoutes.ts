@@ -6,7 +6,7 @@ import {
 import router from "../services/ExpressRouterService";
 
 router.get("/getFuelPricesFromGov", getFuelPricesFromGov);
-router.post("/getFuelPricesPerCity", getFuelPricesFromCity);
+router.post("/getFuelPricesByCity", getFuelPricesFromCity);
 router.post("/getFuelPricesAround", getFuelPricesAround);
 
 export default router;

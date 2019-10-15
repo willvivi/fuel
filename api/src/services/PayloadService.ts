@@ -3,6 +3,7 @@ import axios from "axios";
 import fs from "fs";
 import parser from "xml2json";
 import GasStation, { IGasStation } from "../models/GasStation";
+import stations_2018 from "../../extracts/stations_2018.json";
 
 const getCurrentDate = (): string => {
   const date = new Date();
@@ -75,9 +76,14 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
             console.log(
               "Populating gasstations collection from the latest xml dump..."
             );
-            const gasStationsWithGeoJSON = gasStations.map(
+            const gasStationsWithGeoJSONAndNames = gasStations.map(
               (gasStation: IGasStation) => {
+                const name = stations_2018.find(station => {
+                    return parseInt(gasStation.id, 10) === station.id;
+                });
                 return {
+                  nom: name ? name.Nom : "N/A",
+                  marque: name ? name.Marque : "N/A",
                   location: {
                     coordinates: [
                       parseInt(gasStation.latitude, 10) / 100000,
@@ -89,7 +95,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 };
               }
             );
-            GasStation.insertMany(gasStationsWithGeoJSON, error => {
+            GasStation.insertMany(gasStationsWithGeoJSONAndNames, error => {
               if (err !== null) {
                 console.error("err ", error);
                 reject("Database update failed.");
