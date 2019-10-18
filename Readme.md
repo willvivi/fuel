@@ -12,7 +12,7 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 - Put the API online, preferably with some CI/CD tools hooked to this repository.
 - Build a simple user friendly front page allowing to request the API trough a dynamic form or geolocation.
-- Dockerize the API, MongoDB and the front.
+- ~~Dockerize the API, MongoDB and the front.~~
 - Use the PayloadService as a CRON, and not as an API call.
 
 #### Code
@@ -24,10 +24,9 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 ## Instructions
 
-Prior to running the api and pending the dockerization of the app, you need to install MongoDB on your machine, and create a database named `fuel`. Make sure MongoDB service is running before continuing.
+- Install docker
+- Run `docker-compose up` from the root of the repository
 
-Run `npm install`, then start dev server with `npm run dev`.
-
-Server will run on `localhost` on port `8080`.
+Server will run on `localhost` on port `3000`.
 
 Postman config export is available at the root of the repository.
