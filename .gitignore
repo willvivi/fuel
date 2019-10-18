@@ -40,7 +40,7 @@ jspm_packages/
 api/db/
 
 # Extracts
-api/extracts/
+api/assets/extracts/
 
 # TypeScript v1 declaration files
 typings/

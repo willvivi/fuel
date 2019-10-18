@@ -17,8 +17,8 @@ const getCurrentDate = (): string => {
   return `${currentYear}${currentDay}${currentMonth}`;
 };
 
-const path = `./extracts/fuel${getCurrentDate()}.zip`;
-const outputDir = `./extracts/fuel_${getCurrentDate()}/`;
+const path = `./assets/fuel${getCurrentDate()}.zip`;
+const outputDir = `./assets/extracts/fuel_${getCurrentDate()}/`;
 
 const downloadAndExtractLatestPayload = async (): Promise<string> => {
   console.log("Launching job: Gas Station collection update");
