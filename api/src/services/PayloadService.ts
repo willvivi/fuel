@@ -3,7 +3,7 @@ import axios from "axios";
 import fs from "fs";
 import parser from "xml2json";
 import GasStation, { IGasStation } from "../models/GasStation";
-import stations_2018 from "../../extracts/stations_2018.json";
+import stations_2018 from "../../assets/json/stations_2018.json";
 
 const getCurrentDate = (): string => {
   const date = new Date();

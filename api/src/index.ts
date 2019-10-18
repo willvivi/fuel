@@ -6,7 +6,7 @@ import FuelPricesRoutes from "./routes/FuelPricesRoutes";
 const app = express();
 const port = 8080 || process.env.PORT;
 
-mongoose.connect("mongodb://localhost:27017/fuel", {
+mongoose.connect("mongodb://mongo:27017/fuel", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

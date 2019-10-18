@@ -15,12 +15,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/fuel/getFuelPricesFromGov",
+					"raw": "http://localhost:3000/fuel/getFuelPricesFromGov",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3000",
 					"path": [
 						"fuel",
 						"getFuelPricesFromGov"
@@ -52,12 +52,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/fuel/getFuelPricesByCity",
+					"raw": "http://localhost:3000/fuel/getFuelPricesByCity",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3000",
 					"path": [
 						"fuel",
 						"getFuelPricesByCity"
@@ -99,12 +99,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/fuel/getFuelPricesAround",
+					"raw": "http://localhost:3000/fuel/getFuelPricesAround",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "3000",
 					"path": [
 						"fuel",
 						"getFuelPricesAround"

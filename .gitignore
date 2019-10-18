@@ -36,6 +36,12 @@ build/Release
 node_modules/
 jspm_packages/
 
+# MongoDB files
+api/db/
+
+# Extracts
+api/extracts/
+
 # TypeScript v1 declaration files
 typings/
 
