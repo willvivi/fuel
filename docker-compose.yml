@@ -1,6 +1,21 @@
 version: "3"
 
 services:
+  front:
+    image: "node:10-alpine"
+    user: node
+    environment:
+      - NODE_ENV=development
+    command: "npm start"
+    volumes:
+      - "./front:/home/node/app"
+    working_dir: /home/node/app
+    ports:
+      - "8080:3000"
+    networks:
+      - internal
+    depends_on:
+      - server
   server:
     image: "node:10-alpine"
     user: node
