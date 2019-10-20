@@ -20,6 +20,7 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 - Clean out some keys of the object returned by the API (rough latitude, longitude...)
 - Write tests for the API (TDD unfortunately not applied as I didn't have a clear idea of the features)
 - Weird typing on the GasStations Mongoose model on the "city" field, should be `String` but it is mandatory to use `JSON` instead.
+- Sort out why we can't use the typescript interface as a Schema for Mongoose
 - Use a proper logging solution (eg. Winston) on the PayloadService.
 
 ## Instructions
