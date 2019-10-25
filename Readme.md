@@ -27,8 +27,8 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 ### Local setup
 
-- Install docker
-- Run `dc build` from the root of the repository (might need to run it as superuser)
+- Install Docker
+- Run `docker-compose build` from the root of the repository (might need to run it as superuser)
 
 ### Running the project
 
@@ -36,7 +36,7 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 ### Updating dependencies
 
-- Install your new dependency running `npm install` as usual, then run `dc build` from the root of the repository
+- Install your new dependency running `npm install` as usual, then run `docker-compose build` from the root of the repository
 
 Server will run on `localhost` on port `3000`.
 
