@@ -29,7 +29,7 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 ### Local setup
 
 - Install Docker
-- Run `docker-compose build` from the root of the repository (might need to run it as superuser)
+- Run `docker-compose build` from the root of the repository
 
 ### Running the project
 
