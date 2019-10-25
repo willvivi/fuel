@@ -24,9 +24,21 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 ## Instructions
 
+### Local setup
+
 - Install docker
+- Run `dc build` from the root of the repository (might need to run it as superuser)
+
+### Running the project
+
 - Run `docker-compose up` from the root of the repository
 
+### Updating dependencies
+
+- Install your new dependency running `npm install` as usual, then run `dc build` from the root of the repository
+
 Server will run on `localhost` on port `3000`.
+
+Front will run on `localhost` on port `8080`.
 
 Postman config export is available at the root of the repository.

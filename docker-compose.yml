@@ -2,28 +2,30 @@ version: "3"
 
 services:
   front:
-    image: "node:10-alpine"
+    image: "node_front_fuel"
+    build: "./front"
     user: node
     environment:
       - NODE_ENV=development
     command: "npm start"
     volumes:
       - "./front:/home/node/app"
+      - "/home/node/app/node_modules"
     working_dir: /home/node/app
     ports:
       - "8080:3000"
-    networks:
-      - internal
     depends_on:
       - server
   server:
-    image: "node:10-alpine"
+    image: "node_api_fuel"
+    build: "./api"
     user: node
     environment:
       - NODE_ENV=development
     command: "npm run dev"
     volumes:
       - "./api:/home/node/app"
+      - "/home/node/app/node_modules"
     working_dir: /home/node/app
     ports:
       - "3000:8080"
