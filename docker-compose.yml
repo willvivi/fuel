@@ -2,7 +2,7 @@ version: "3"
 
 services:
   front:
-    image: "node_front_fuel"
+    image: "node_front_fuel:latest"
     build: "./front"
     user: node
     environment:
@@ -17,7 +17,7 @@ services:
     depends_on:
       - server
   server:
-    image: "node_api_fuel"
+    image: "node_api_fuel:latest"
     build: "./api"
     user: node
     environment:

@@ -35,6 +35,11 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 - Run `docker-compose up` from the root of the repository
 
+### Testing the project
+
+- Run `docker exec -it fuel_server_1 "bash"` in a new terminal (make sure the project is up before running this)
+- Once logged onto the container, run `jest --watchAll`. The tests will run when the watcher detects file changes (TDD). To run the tests once, simply run `jest`.
+
 ### Updating dependencies
 
 - Install your new dependency running `npm install` as usual, then run `docker-compose build` from the root of the repository
