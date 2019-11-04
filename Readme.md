@@ -44,6 +44,10 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 - Install your new dependency running `npm install` as usual, then run `docker-compose build` from the root of the repository
 
+#### On Windows
+
+- If you run into MSBuild errors, launch a PowerShell as administrator and install `windows-build-tools` using this command: `npm install -g --production windows-build-tools`
+
 Server will run on `localhost` on port `3000`.
 
 Front will run on `localhost` on port `8080`.
