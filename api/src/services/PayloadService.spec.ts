@@ -9,7 +9,7 @@ describe("PayloadService", () => {
     });
   });
 
-  it("should return successful database update", async () => {
+  it.skip("should return successful database update", async () => {
     const result = await downloadAndExtractLatestPayload();
     expect(result).toEqual("Database successfully updated");
   }, 60000);
