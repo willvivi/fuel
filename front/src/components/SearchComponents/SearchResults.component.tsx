@@ -1,5 +1,5 @@
 import React from "react";
-import { IGasStation, IFuel } from "../models/GasStation";
+import { IGasStation, IFuel } from "../../models/GasStation";
 import {
   Results,
   GasStation,

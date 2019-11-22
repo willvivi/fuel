@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import SearchBar from "./components/SearchBar.component";
+import SearchBar from "./components/SearchBar/SearchBar.component";
 import IGasStation from "./models/GasStation";
 import { getGasStationsByCity } from "./services/GasStationService";
-import SearchResults from "./components/SearchResults.component";
+import SearchResults from "./components/SearchComponents/SearchResults.component";
 import { MainContainer, Header, Title } from "./App.style";
 
 interface ISearchState {
@@ -21,16 +21,19 @@ const App: React.FC = () => {
   const interval: number = 500;
 
   const handleSearch = (city: string) => {
-    if (city && city.length > 2) {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-      timeout = setTimeout(async () => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(async () => {
+      if (city && city.length > 2) {
         getGasStationsByCity(city).then((results: IGasStation[]) => {
           setSearch({ city: search.city, results });
         });
-      }, interval);
-    }
+      } else {
+        setSearch({ city: search.city, results: [] });
+      }
+    }, interval);
   };
 
   return (

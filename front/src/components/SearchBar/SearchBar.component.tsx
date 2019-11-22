@@ -9,7 +9,9 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     props.onChange(e.target.value);
   };
 
-  return <input type="text" placeholder="ville" onChange={handleChange} />;
+  return (
+    <input type="text" placeholder="Type city here" onChange={handleChange} />
+  );
 };
 
 export default SearchBar;
