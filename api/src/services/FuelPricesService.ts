@@ -1,11 +1,17 @@
 import GasStation, { IGasStation } from "../models/GasStation";
 
-export const getFuelPricesByCity = async (
+export const getFuelPricesByAddress = async (
+  address: string,
+  postcode: string,
   city: string
 ): Promise<IGasStation[]> => {
   return new Promise((resolve, reject) => {
     GasStation.find(
-      { ville: { $regex: ".*" + city + ".*", $options: "i" } },
+      {
+        ville: { $regex: ".*" + city + ".*", $options: "i" },
+        cp: { $regex: postcode + ".*", $options: "i" },
+        adresse: { $regex: ".*" + address + ".*", $options: "i" },
+      },
       (err, res) => {
         if (err) {
           console.error(err);

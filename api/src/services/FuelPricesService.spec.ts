@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
-import { getFuelPricesByCity, getFuelPricesAround } from "./FuelPricesService";
+import {
+  getFuelPricesByAddress,
+  getFuelPricesAround,
+} from "./FuelPricesService";
 import { IGasStation } from "../models/GasStation";
 
 describe("FuelPricesService", () => {
@@ -10,9 +13,15 @@ describe("FuelPricesService", () => {
     });
   });
 
-  it("should return gas stations by city", async () => {
-    const city: string = "Paris";
-    const result: IGasStation[] = await getFuelPricesByCity(city);
+  it("should return gas stations by address", async () => {
+    const address: string = "55 Av du général Leclerc";
+    const postcode: string = "94470";
+    const city: string = "Boissy saint léger";
+    const result: IGasStation[] = await getFuelPricesByAddress(
+      address,
+      postcode,
+      city
+    );
     expect(result.length).toBeGreaterThan(0);
   });
 
@@ -23,7 +32,6 @@ describe("FuelPricesService", () => {
       coordinates,
       radius
     );
-    console.log(result[0]);
     expect(result.length).toBeGreaterThan(0);
   });
 });

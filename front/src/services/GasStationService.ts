@@ -1,16 +1,17 @@
 import IGasStation from "../models/GasStation";
+import ISearch from "../models/Search";
 
 const url = "http://localhost:3000/fuel";
 
-export const getGasStationsByCity: Function = (
-  city: string
+export const getGasStationsByAddress: Function = (
+  search: ISearch
 ): Promise<IGasStation[]> => {
-  return fetch(url + "/getFuelPricesByCity", {
+  return fetch(url + "/getFuelPricesFromAddress", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: `city=${city}`,
+    body: `city=${search.city}&address=${search.address}&postcode=${search.postcode}`,
   }).then(response => {
     if (!response.ok) {
       throw new Error(response.statusText);

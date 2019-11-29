@@ -1,47 +1,57 @@
 import React, { useState } from "react";
 import SearchBar from "./components/SearchBar/SearchBar.component";
 import IGasStation from "./models/GasStation";
-import { getGasStationsByCity } from "./services/GasStationService";
+import { getGasStationsByAddress } from "./services/GasStationService";
 import SearchResults from "./components/SearchComponents/SearchResults.component";
-import { MainContainer, Header, Title } from "./App.style";
+import { MainContainer, Title } from "./App.style";
+import ISearch from "./models/Search";
 
-interface ISearchState {
-  city: string;
-  results: IGasStation[];
-}
-
-const initialSearch: ISearchState = {
+const initialSearch: ISearch = {
   city: "",
+  address: "",
+  postcode: "",
   results: [],
 };
 
 const App: React.FC = () => {
-  const [search, setSearch] = useState<ISearchState>(initialSearch);
+  const [search, setSearch] = useState<ISearch>(initialSearch);
   let timeout: any = null;
   const interval: number = 500;
+  const minChars: number = 1;
 
-  const handleSearch = (city: string) => {
+  const handleSearch = (search: ISearch) => {
     if (timeout) {
       clearTimeout(timeout);
     }
 
     timeout = setTimeout(async () => {
-      if (city && city.length > 2) {
-        getGasStationsByCity(city).then((results: IGasStation[]) => {
-          setSearch({ city: search.city, results });
+      if (
+        search &&
+        (search.city.length > minChars ||
+          search.postcode.length > minChars ||
+          search.address.length > minChars)
+      ) {
+        getGasStationsByAddress(search).then((results: IGasStation[]) => {
+          setSearch({ ...search, results: results });
         });
       } else {
-        setSearch({ city: search.city, results: [] });
+        setSearch({ ...search, results: [] });
       }
     }, interval);
   };
 
   return (
     <MainContainer>
-      <Title>⛽ Fuel ⛽</Title>
-      <Header>
-        <SearchBar onChange={handleSearch}></SearchBar>
-      </Header>
+      <Title>
+        <span role="img" aria-label="La pompe :)">
+          ⛽
+        </span>{" "}
+        Fuel{" "}
+        <span role="img" aria-label="La pompe :)">
+          ⛽
+        </span>
+      </Title>
+      <SearchBar onChange={handleSearch}></SearchBar>
       <SearchResults results={search.results} />
     </MainContainer>
   );
