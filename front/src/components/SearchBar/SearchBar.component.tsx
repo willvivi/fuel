@@ -51,7 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
       <input
         type="text"
         id="postcode"
-        placeholder="Postcode (eg. 75001)"
+        placeholder="Postcode / Dep (eg. 75001 / 75)"
         onChange={handleChange}
       />
       <input

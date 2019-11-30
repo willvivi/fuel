@@ -9,7 +9,7 @@ export const getFuelPricesByAddress = async (
     GasStation.find(
       {
         ville: { $regex: ".*" + city + ".*", $options: "i" },
-        cp: { $regex: postcode + ".*", $options: "i" },
+        cp: { $regex: "^" + postcode + ".*", $options: "i" },
         adresse: { $regex: ".*" + address + ".*", $options: "i" },
       },
       (err, res) => {
