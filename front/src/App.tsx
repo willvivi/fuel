@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import SearchBar from "./components/SearchBar/SearchBar.component";
 import IGasStation from "./models/GasStation";
-import { getGasStationsByAddress } from "./services/GasStationService";
+import {
+  getGasStationsByAddress,
+  getGasStationsByCoordinates,
+} from "./services/GasStationService";
 import SearchResults from "./components/SearchComponents/SearchResults.component";
 import { MainContainer, Title } from "./App.style";
-import ISearch from "./models/Search";
-
-const initialSearch: ISearch = {
-  city: "",
-  address: "",
-  postcode: "",
-  results: [],
-};
+import ISearch, { initialISearch } from "./models/Search";
 
 const App: React.FC = () => {
-  const [search, setSearch] = useState<ISearch>(initialSearch);
+  const [search, setSearch] = useState<ISearch>(initialISearch);
   let timeout: any = null;
   const interval: number = 500;
   const minChars: number = 1;
@@ -25,7 +21,11 @@ const App: React.FC = () => {
     }
 
     timeout = setTimeout(async () => {
-      if (
+      if (search && search.location.length > 0) {
+        getGasStationsByCoordinates(search).then((results: IGasStation[]) => {
+          setSearch({ ...search, results: results });
+        });
+      } else if (
         search &&
         (search.city.length > minChars ||
           search.postcode.length > minChars ||

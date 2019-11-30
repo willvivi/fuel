@@ -19,3 +19,20 @@ export const getGasStationsByAddress: Function = (
     return response.json() as Promise<IGasStation[]>;
   });
 };
+
+export const getGasStationsByCoordinates: Function = (
+  search: ISearch
+): Promise<IGasStation[]> => {
+  return fetch(url + "/getFuelPricesAround", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `latitude=${search.location[0]}&longitude=${search.location[1]}&radius=${search.radius}`,
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.json() as Promise<IGasStation[]>;
+  });
+};
