@@ -16,6 +16,8 @@ services:
       - "8080:3000"
     depends_on:
       - server
+    networks:
+      - internal
   server:
     image: "node_api_fuel:latest"
     build: "./api"
