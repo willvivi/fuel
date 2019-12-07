@@ -1,7 +1,7 @@
 import IGasStation from "../models/GasStation";
 import ISearch from "../models/Search";
 
-const url = " http://fuel.francecentral.cloudapp.azure.com:3000/fuel";
+const url = "http://fuel.francecentral.cloudapp.azure.com:3000/fuel";
 
 export const getGasStationsByAddress: Function = (
   search: ISearch
