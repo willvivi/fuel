@@ -21,7 +21,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
     <Grid item xs={12}>
       <Paper>
         {props.results && props.results.length > 0 && (
-          <Table>
+          <Table size="small" aria-label="a dense table">
             <TableHead>
               <TableCell>Station</TableCell>
               <TableCell>Brand</TableCell>
@@ -45,11 +45,11 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     <TableCell>{gasStation.ville}</TableCell>
                     <TableCell>{gasStation.cp}</TableCell>
                     <TableCell>
-                      <ul>
-                        {gasStation.services.service.map(service => (
-                          <li>{service}</li>
-                        ))}
-                      </ul>
+                      {gasStation.services.service.map((service, index) => {
+                        return index === gasStation.services.service.length - 1
+                          ? service
+                          : service + ", ";
+                      })}
                     </TableCell>
                     <TableCell>
                       {gasStation.prix.map((prix: IFuel) =>

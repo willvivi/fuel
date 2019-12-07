@@ -23,10 +23,12 @@ export const Separator = styled.div`
 export const AddressFields = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 `;
 
 export const GeolocationFields = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   margin-top: 20px;
 `;
