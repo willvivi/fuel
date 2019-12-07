@@ -46,7 +46,7 @@ const App: React.FC = () => {
         <span role="img" aria-label="La pompe :)">
           ⛽
         </span>{" "}
-        Fuel{" "}
+        Faire de l'essence{" "}
         <span role="img" aria-label="La pompe :)">
           ⛽
         </span>
