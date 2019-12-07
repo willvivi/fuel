@@ -1,7 +1,7 @@
 import IGasStation from "../models/GasStation";
 import ISearch from "../models/Search";
 
-const url = "https://fairedelessence.com:3000/fuel";
+const url = "/api/fuel";
 
 export const getGasStationsByAddress: Function = (
   search: ISearch
