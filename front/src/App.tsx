@@ -5,7 +5,7 @@ import {
   getGasStationsByAddress,
   getGasStationsByCoordinates,
 } from "./services/GasStationService";
-import SearchResults from "./components/SearchComponents/SearchResults.component";
+import SearchResults from "./components/SearchResults/SearchResults.component";
 import { MainContainer, Title } from "./App.style";
 import ISearch, { initialISearch } from "./models/Search";
 
