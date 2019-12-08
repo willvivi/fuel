@@ -6,7 +6,7 @@ interface ISearch {
   postcode: string;
   location: number[];
   radius: number;
-  results?: IGasStation[];
+  results: IGasStation[];
 }
 
 export const initialISearch: ISearch = {
@@ -15,6 +15,7 @@ export const initialISearch: ISearch = {
   postcode: "",
   location: [],
   radius: 5,
+  results: [],
 };
 
 export default ISearch;

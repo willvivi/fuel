@@ -2,11 +2,13 @@ export interface IServices {
   service: string[];
 }
 
-export interface IFuel {
-  nom: string;
-  id: number;
-  maj: string;
-  valeur: number;
+export interface IFuels {
+  gnv: number;
+  sp95E10: number;
+  sp95: number;
+  sp98: number;
+  e85: number;
+  gazole: number;
 }
 
 interface IGeoJSON {
@@ -14,7 +16,7 @@ interface IGeoJSON {
   coordinates: number[];
 }
 
-export interface IGasStation {
+export interface IGasStation extends IFuels {
   id: string;
   nom?: string;
   marque?: string;
@@ -26,7 +28,6 @@ export interface IGasStation {
   adresse: string;
   ville: string;
   services: IServices;
-  prix: IFuel[];
 }
 
 export default IGasStation;

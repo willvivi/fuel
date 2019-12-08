@@ -2,7 +2,12 @@ import admZip from "adm-zip";
 import axios from "axios";
 import fs from "fs";
 import parser from "xml2json";
-import GasStation, { IGasStation } from "../models/GasStation";
+import GasStation, {
+  IGasStation,
+  IFuel,
+  IFuels,
+  IGasStationSource,
+} from "../models/GasStation";
 import stations_2018 from "../../assets/json/stations_2018.json";
 
 const getCurrentDate = (): string => {
@@ -75,10 +80,41 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
               "Populating gasstations collection from the latest xml dump..."
             );
             const gasStationsWithGeoJSONAndNames = gasStations.map(
-              (gasStation: IGasStation) => {
+              (gasStation: IGasStationSource) => {
                 const name = stations_2018.find(station => {
                   return parseInt(gasStation.id, 10) === station.id;
                 });
+
+                const fuels: IFuels = {
+                  gnv: 0,
+                  sp95E10: 0,
+                  sp95: 0,
+                  sp98: 0,
+                  e85: 0,
+                  gazole: 0,
+                };
+
+                if (Array.isArray(gasStation.prix)) {
+                  gasStation.prix.map((prix: IFuel) => {
+                    switch (prix.nom) {
+                      case "E10":
+                        fuels.sp95E10 = prix.valeur;
+                        break;
+                      case "SP95":
+                        fuels.sp95 = prix.valeur;
+                        break;
+                      case "SP98":
+                        fuels.sp98 = prix.valeur;
+                        break;
+                      case "E85":
+                        fuels.e85 = prix.valeur;
+                        break;
+                      case "Gazole":
+                        fuels.gazole = prix.valeur;
+                        break;
+                    }
+                  });
+                }
                 return {
                   nom: name ? name.Nom : "N/A",
                   marque: name ? name.Marque : "N/A",
@@ -90,6 +126,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                     type: "Point",
                   },
                   ...gasStation,
+                  ...fuels,
                 };
               }
             );
