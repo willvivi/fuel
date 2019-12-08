@@ -61,9 +61,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   return (
     <Container>
-      {search.location.length > 0 && (
-        <span>Please reset location before using the address fields</span>
-      )}
       <AddressFields>
         <StyledTextField
           type="text"
@@ -91,11 +88,6 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         />
       </AddressFields>
       <Divider />
-      {search.location.length > 0 && (
-        <span style={{ marginTop: "20px" }}>
-          Location fetched: {search.location[0]}, {search.location[1]}
-        </span>
-      )}
       <GeolocationFields>
         <Button variant="contained" id="geolocation" onClick={handleClick}>
           Locate Me !

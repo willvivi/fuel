@@ -9,7 +9,28 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import ChildCareIcon from "@material-ui/icons/ChildCare";
+import BuildIcon from "@material-ui/icons/Build";
+import LocalShippingIcon from "@material-ui/icons/LocalShipping";
+import LocalAtmIcon from "@material-ui/icons/LocalAtm";
+import LocalCarWashIcon from "@material-ui/icons/LocalCarWash";
+import WcIcon from "@material-ui/icons/Wc";
+import DirectionsCarIcon from "@material-ui/icons/DirectionsCar";
+import FastfoodIcon from "@material-ui/icons/Fastfood";
+import AlbumIcon from "@material-ui/icons/Album";
+import EmailIcon from "@material-ui/icons/Email";
+import WifiIcon from "@material-ui/icons/Wifi";
+import EvStationIcon from "@material-ui/icons/EvStation";
+import InvertColorsIcon from "@material-ui/icons/InvertColors";
+import LocalLaundryServiceIcon from "@material-ui/icons/LocalLaundryService";
+import RvHookupIcon from "@material-ui/icons/RvHookup";
+import RestaurantIcon from "@material-ui/icons/Restaurant";
+import LocalBarIcon from "@material-ui/icons/LocalBar";
+import BathtubIcon from "@material-ui/icons/Bathtub";
+import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
+import Tooltip from "@material-ui/core/Tooltip";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 interface SearchResultsProps {
   results?: IGasStation[];
 }
@@ -45,11 +66,9 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     <TableCell>{gasStation.ville}</TableCell>
                     <TableCell>{gasStation.cp}</TableCell>
                     <TableCell>
-                      {gasStation.services.service.map((service, index) => {
-                        return index === gasStation.services.service.length - 1
-                          ? service
-                          : service + ", ";
-                      })}
+                      {gasStation.services.service.map(service => (
+                        <Tooltip title={service}>{getService(service)}</Tooltip>
+                      ))}
                     </TableCell>
                     <TableCell>
                       {gasStation.prix.map((prix: IFuel) =>
@@ -85,5 +104,64 @@ const SearchResults: React.FC<SearchResultsProps> = (
     </Grid>
   </Container>
 );
+
+const getService: Function = (service: string): JSX.Element => {
+  switch (service) {
+    case "Carburant additivé":
+      return <EvStationIcon />;
+    case "Boutique alimentaire":
+      return <ShoppingCartIcon />;
+    case "Station de gonflage":
+      return <AlbumIcon />;
+    case "Boutique non alimentaire":
+      return <ShoppingCartIcon />;
+    case "Services réparation / entretien":
+      return <BuildIcon />;
+    case "Piste poids lourds":
+      return <LocalShippingIcon />;
+    case "DAB (Distributeur automatique de billets)":
+      return <LocalAtmIcon />;
+    case "Lavage automatique":
+      return <LocalCarWashIcon />;
+    case "Lavage manuel":
+      return <LocalCarWashIcon />;
+    case "Vente de fioul domestique":
+      return <InvertColorsIcon />;
+    case "Vente de gaz domestique (Butane, Propane)":
+      return <FormatColorResetIcon />;
+    case "Toilettes publiques":
+      return <WcIcon />;
+    case "Location de véhicule":
+      return <DirectionsCarIcon />;
+    case "GNV":
+      return <FormatColorResetIcon />;
+    case "Restauration à emporter":
+      return <FastfoodIcon />;
+    case "Relais colis":
+      return <EmailIcon />;
+    case "Wifi":
+      return <WifiIcon />;
+    case "Automate CB 24/24":
+      return <LocalAtmIcon />;
+    case "Vente d'additifs carburants":
+      return <InvertColorsIcon />;
+    case "Aire de camping-cars":
+      return <RvHookupIcon />;
+    case "Restauration sur place":
+      return <RestaurantIcon />;
+    case "Vente de pétrole lampant":
+      return <InvertColorsIcon />;
+    case "Laverie":
+      return <LocalLaundryServiceIcon />;
+    case "Espace bébé":
+      return <ChildCareIcon />;
+    case "bar":
+      return <LocalBarIcon />;
+    case "Douches":
+      return <BathtubIcon />;
+    default:
+      return <HelpOutlineIcon />;
+  }
+};
 
 export default SearchResults;
