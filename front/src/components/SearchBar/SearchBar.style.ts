@@ -1,29 +1,25 @@
 import styled from "styled-components";
+import { TextField } from "@material-ui/core";
 
 export const Container = styled.div`
   display: flex;
-  justify-content: center;
   flex-direction: column;
   margin-bottom: 20px;
-  input {
-    height: 30px;
-    width: 160px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-  }
 `;
 
-export const Separator = styled.div`
-  background-color: gray;
-  height: 2px;
-  width: 100%;
+export const StyledTextField = styled(TextField)`
+  width: 160px;
+  margin: 10px !important;
+  border-radius: 5px;
 `;
 
 export const AddressFields = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 export const GeolocationFields = styled.div`
@@ -31,4 +27,7 @@ export const GeolocationFields = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 20px;
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
 `;

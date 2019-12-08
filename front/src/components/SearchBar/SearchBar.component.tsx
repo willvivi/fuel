@@ -3,9 +3,11 @@ import {
   Container,
   AddressFields,
   GeolocationFields,
-  Separator,
+  StyledTextField,
 } from "./SearchBar.style";
 import ISearch, { initialISearch } from "../../models/Search";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 
 interface SearchBarProps {
   onChange: (search: ISearch) => void;
@@ -34,7 +36,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     }
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     switch (e.currentTarget.id) {
       case "geolocation":
         navigator.geolocation.getCurrentPosition((position: Position) => {
@@ -60,58 +62,59 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   return (
     <Container>
       {search.location.length > 0 && (
-        <span style={{ marginBottom: "20px" }}>
-          Please reset location before using the address fields
-        </span>
+        <span>Please reset location before using the address fields</span>
       )}
       <AddressFields>
-        <input
+        <StyledTextField
           type="text"
           id="address"
-          placeholder="Street (eg. Avenue Charles de Gaulle)"
+          label="Street"
           value={search.address}
           onChange={handleChange}
           disabled={search.location.length > 0}
         />
-        <input
+        <StyledTextField
           type="text"
           id="postcode"
-          placeholder="Postcode / Dep (eg. 75001 / 75)"
+          label="Postcode / Dep"
           value={search.postcode}
           onChange={handleChange}
           disabled={search.location.length > 0}
-          alt="salut"
         />
-        <input
+        <StyledTextField
           type="text"
           id="city"
-          placeholder="City (eg. Bordeaux)"
+          label="City"
           value={search.city}
           onChange={handleChange}
           disabled={search.location.length > 0}
         />
       </AddressFields>
-      <Separator></Separator>
+      <Divider />
       {search.location.length > 0 && (
         <span style={{ marginTop: "20px" }}>
           Location fetched: {search.location[0]}, {search.location[1]}
         </span>
       )}
       <GeolocationFields>
-        <input
-          type="button"
-          value="Locate me !"
-          id="geolocation"
-          onClick={handleClick}
-        />
-        <input
+        <Button variant="contained" id="geolocation" onClick={handleClick}>
+          Locate Me !
+        </Button>
+        <StyledTextField
           type="number"
-          placeholder="Radius (km)"
+          label="Radius (km)"
           id="radius"
           value={search.radius}
           onChange={handleChange}
         />
-        <input type="button" value="Reset" id="reset" onClick={handleClick} />
+        <Button
+          color="secondary"
+          variant="contained"
+          id="reset"
+          onClick={handleClick}
+        >
+          Reset
+        </Button>{" "}
       </GeolocationFields>
     </Container>
   );

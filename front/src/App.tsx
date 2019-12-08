@@ -8,6 +8,7 @@ import {
 import SearchResults from "./components/SearchResults/SearchResults.component";
 import { MainContainer, Title } from "./App.style";
 import ISearch, { initialISearch } from "./models/Search";
+import LocalGasStationIcon from "@material-ui/icons/LocalGasStation";
 
 const App: React.FC = () => {
   const [search, setSearch] = useState<ISearch>(initialISearch);
@@ -43,13 +44,9 @@ const App: React.FC = () => {
   return (
     <MainContainer>
       <Title>
-        <span role="img" aria-label="La pompe :)">
-          ⛽
-        </span>{" "}
-        Faire de l'essence{" "}
-        <span role="img" aria-label="La pompe :)">
-          ⛽
-        </span>
+        <LocalGasStationIcon />
+        &nbsp;Faire de l'essence&nbsp;
+        <LocalGasStationIcon />
       </Title>
       <SearchBar onChange={handleSearch}></SearchBar>
       <SearchResults results={search.results} />
