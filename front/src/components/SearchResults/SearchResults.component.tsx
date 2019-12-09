@@ -249,7 +249,20 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           <span style={{ fontStyle: "italic" }}>Inconnu</span>
                         )}
                       </TableCell>
-                      <TableCell>{gasStation.adresse}</TableCell>
+                      <TableCell>
+                        <a
+                          href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
+                            " ",
+                            "+"
+                          )}+${gasStation.ville.replace(" ", "+")}+${
+                            gasStation.cp
+                          }`}
+                          target="_blank"
+                          style={{ color: "black" }}
+                        >
+                          {gasStation.adresse}
+                        </a>
+                      </TableCell>
                       <TableCell>{gasStation.ville}</TableCell>
                       <TableCell>{gasStation.cp}</TableCell>
                       <TableCell>
