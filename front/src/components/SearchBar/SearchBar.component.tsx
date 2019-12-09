@@ -19,16 +19,20 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.currentTarget.id) {
       case "address":
-        setSearch({ ...search, address: e.target.value });
+        setSearch({ ...search, location: [], address: e.target.value });
         break;
       case "postcode":
-        setSearch({ ...search, postcode: e.target.value });
+        setSearch({ ...search, location: [], postcode: e.target.value });
         break;
       case "city":
-        setSearch({ ...search, city: e.target.value });
+        setSearch({ ...search, location: [], city: e.target.value });
         break;
       case "radius":
-        setSearch({ ...search, radius: parseInt(e.target.value, 10) });
+        setSearch({
+          ...search,
+          location: [],
+          radius: parseInt(e.target.value, 10),
+        });
         break;
       default:
         setSearch(initialISearch);
@@ -41,7 +45,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
       case "geolocation":
         navigator.geolocation.getCurrentPosition((position: Position) => {
           setSearch({
-            ...search,
+            ...initialISearch,
             location: [position.coords.latitude, position.coords.longitude],
           });
         });
@@ -61,40 +65,32 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   return (
     <Container>
+      <span>Recherche</span>
       <AddressFields>
         <StyledTextField
           type="text"
-          id="address"
-          label="Street"
-          value={search.address}
-          onChange={handleChange}
-          disabled={search.location.length > 0}
-        />
-        <StyledTextField
-          type="text"
           id="postcode"
-          label="Postcode / Dep"
+          label="Code Postal / Dpt"
           value={search.postcode}
           onChange={handleChange}
-          disabled={search.location.length > 0}
         />
         <StyledTextField
           type="text"
           id="city"
-          label="City"
+          label="Ville"
           value={search.city}
           onChange={handleChange}
-          disabled={search.location.length > 0}
         />
       </AddressFields>
       <Divider />
+      <span style={{ marginTop: "10px" }}>Géolocalisation</span>
       <GeolocationFields>
         <Button variant="contained" id="geolocation" onClick={handleClick}>
-          Locate Me !
+          Localisez-moi !
         </Button>
         <StyledTextField
           type="number"
-          label="Radius (km)"
+          label="Distance max. (km)"
           id="radius"
           value={search.radius}
           onChange={handleChange}
@@ -105,7 +101,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           id="reset"
           onClick={handleClick}
         >
-          Reset
+          Réinitialiser
         </Button>{" "}
       </GeolocationFields>
     </Container>

@@ -112,12 +112,15 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                       case "Gazole":
                         fuels.gazole = prix.valeur;
                         break;
+                      case "GPLc":
+                        fuels.gnv = prix.valeur;
+                        break;
                     }
                   });
                 }
                 return {
-                  nom: name ? name.Nom : "N/A",
-                  marque: name ? name.Marque : "N/A",
+                  nom: name ? name.Nom : "",
+                  marque: name ? name.Marque : "",
                   location: {
                     coordinates: [
                       parseInt(gasStation.latitude, 10) / 100000,

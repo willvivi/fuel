@@ -49,7 +49,7 @@ const App: React.FC = () => {
         <LocalGasStationIcon />
       </Title>
       <SearchBar onChange={handleSearch}></SearchBar>
-      <SearchResults results={search.results} />
+      {search.results.length > 0 && <SearchResults results={search.results} />}
     </MainContainer>
   );
 };

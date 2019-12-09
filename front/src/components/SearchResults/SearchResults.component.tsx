@@ -9,8 +9,6 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 
 import IGasStation from "../../models/GasStation";
 
@@ -92,11 +90,13 @@ const headCells: HeadCell[] = [
     label: "Code Postal",
   },
   { id: "services", label: "Services" },
+  { id: "gazole", label: "Gazole" },
+
   { id: "sp95E10", label: "E10 (SP95)" },
   { id: "sp95", label: "E5 (SP95)" },
   { id: "sp98", label: "E5 (SP98)" },
   { id: "e85", label: "E85" },
-  { id: "gazole", label: "Gazole" },
+  { id: "gnv", label: "GPL" },
 ];
 
 interface EnhancedTableProps {
@@ -108,7 +108,7 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { classes, order, orderBy, rowCount, onRequestSort } = props;
+  const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property: string) => (
     event: React.MouseEvent<unknown>
   ) => {
@@ -146,6 +146,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    unavailable: {
+      backgroundColor: "#E3E2E2",
+    },
     root: {
       width: "100%",
       overflowX: "scroll",
@@ -232,8 +235,20 @@ const SearchResults: React.FC<SearchResultsProps> = (
                 .map((gasStation: IGasStation) => {
                   return (
                     <TableRow key={gasStation.id}>
-                      <TableCell>{gasStation.nom}</TableCell>
-                      <TableCell>{gasStation.marque}</TableCell>
+                      <TableCell>
+                        {gasStation.nom ? (
+                          gasStation.nom
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>Inconnu</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {gasStation.marque ? (
+                          gasStation.nom
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>Inconnu</span>
+                        )}
+                      </TableCell>
                       <TableCell>{gasStation.adresse}</TableCell>
                       <TableCell>{gasStation.ville}</TableCell>
                       <TableCell>{gasStation.cp}</TableCell>
@@ -244,20 +259,83 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           </Tooltip>
                         ))}
                       </TableCell>
-                      <TableCell>
-                        {gasStation.sp95E10 > 0 ? gasStation.sp95E10 : ""}
+                      <TableCell
+                        className={
+                          gasStation.gazole === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.gazole > 0 ? (
+                          gasStation.gazole
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Carburant indisp.
+                          </span>
+                        )}
                       </TableCell>
-                      <TableCell>
-                        {gasStation.sp95 > 0 ? gasStation.sp95 : ""}
+                      <TableCell
+                        className={
+                          gasStation.sp95E10 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.sp95E10 > 0 ? (
+                          gasStation.sp95E10
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Carburant indisp.
+                          </span>
+                        )}
                       </TableCell>
-                      <TableCell>
-                        {gasStation.sp98 > 0 ? gasStation.sp98 : ""}
+                      <TableCell
+                        className={
+                          gasStation.sp95 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.sp95 > 0 ? (
+                          gasStation.sp95
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Carburant indisp.
+                          </span>
+                        )}
                       </TableCell>
-                      <TableCell>
-                        {gasStation.e85 > 0 ? gasStation.e85 : ""}
+                      <TableCell
+                        className={
+                          gasStation.sp98 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.sp98 > 0 ? (
+                          gasStation.sp98
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Carburant indisp.
+                          </span>
+                        )}
                       </TableCell>
-                      <TableCell>
-                        {gasStation.gazole > 0 ? gasStation.gazole : ""}
+                      <TableCell
+                        className={
+                          gasStation.e85 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.e85 > 0 ? (
+                          gasStation.e85
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Carburant indisp.
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell
+                        className={
+                          gasStation.gnv === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.gnv > 0 ? (
+                          gasStation.gnv
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Carburant indisp.
+                          </span>
+                        )}
                       </TableCell>
                     </TableRow>
                   );
