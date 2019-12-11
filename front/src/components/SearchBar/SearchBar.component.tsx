@@ -46,6 +46,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         navigator.geolocation.getCurrentPosition((position: Position) => {
           setSearch({
             ...initialISearch,
+            radius: search.radius,
             location: [position.coords.latitude, position.coords.longitude],
           });
         });
