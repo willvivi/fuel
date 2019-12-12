@@ -4,7 +4,16 @@ interface IServices {
   service: string[];
 }
 
-interface IFuel {
+export interface IFuels {
+  gnv: number;
+  sp95E10: number;
+  sp95: number;
+  sp98: number;
+  e85: number;
+  gazole: number;
+}
+
+export interface IFuel {
   nom: string;
   id: number;
   maj: string;
@@ -16,7 +25,7 @@ interface IGeoJSON {
   coordinates: number[];
 }
 
-export interface IGasStation extends Document {
+export interface IGasStation extends Document, IFuels {
   id: string;
   nom?: string;
   marque?: string;
@@ -28,7 +37,10 @@ export interface IGasStation extends Document {
   adresse: string;
   ville: string;
   services: IServices;
-  prix: IFuel[];
+}
+
+export interface IGasStationSource extends IGasStation {
+  prix: IFuel[] | IFuel;
 }
 
 const LocationSchema = new mongoose.Schema({
@@ -50,26 +62,7 @@ const ServicesSchema = new mongoose.Schema({
   },
 });
 
-const FuelSchema = new mongoose.Schema({
-  nom: {
-    type: String,
-    required: true,
-  },
-  id: {
-    type: Number,
-    required: true,
-  },
-  maj: {
-    type: Date,
-    required: true,
-  },
-  valeur: {
-    type: Number,
-    required: true,
-  },
-});
-
-const GasStationSchema: Schema = new Schema({
+const GasStationSchema: Schema = new Schema<IGasStation>({
   id: Number,
   nom: {
     type: String,
@@ -87,7 +80,30 @@ const GasStationSchema: Schema = new Schema({
   adresse: String,
   ville: JSON,
   services: ServicesSchema,
-  prix: [FuelSchema],
+  gnv: {
+    type: Number,
+    required: false,
+  },
+  sp95E10: {
+    type: Number,
+    required: false,
+  },
+  sp95: {
+    type: Number,
+    required: false,
+  },
+  sp98: {
+    type: Number,
+    required: false,
+  },
+  e85: {
+    type: Number,
+    required: false,
+  },
+  gazole: {
+    type: Number,
+    required: false,
+  },
 });
 
 const GasStation = mongoose.model<IGasStation>("GasStation", GasStationSchema);

@@ -1,25 +1,56 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.scss";
+import React, { useState } from "react";
+import SearchBar from "./components/SearchBar/SearchBar.component";
+import IGasStation from "./models/GasStation";
+import {
+  getGasStationsByAddress,
+  getGasStationsByCoordinates,
+} from "./services/GasStationService";
+import SearchResults from "./components/SearchResults/SearchResults.component";
+import { MainContainer, Title } from "./App.style";
+import ISearch, { initialISearch } from "./models/Search";
+import LocalGasStationIcon from "@material-ui/icons/LocalGasStation";
 
 const App: React.FC = () => {
+  const [search, setSearch] = useState<ISearch>(initialISearch);
+  let timeout: any = null;
+  const interval: number = 500;
+  const minChars: number = 1;
+
+  const handleSearch = (search: ISearch) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(async () => {
+      if (search && search.location.length > 0) {
+        getGasStationsByCoordinates(search).then((results: IGasStation[]) => {
+          setSearch({ ...search, results: results });
+        });
+      } else if (
+        search &&
+        (search.city.length > minChars ||
+          search.postcode.length > minChars ||
+          search.address.length > minChars)
+      ) {
+        getGasStationsByAddress(search).then((results: IGasStation[]) => {
+          setSearch({ ...search, results: results });
+        });
+      } else {
+        setSearch({ ...search, results: [] });
+      }
+    }, interval);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MainContainer>
+      <Title>
+        <LocalGasStationIcon />
+        &nbsp;Faire de l'essence&nbsp;
+        <LocalGasStationIcon />
+      </Title>
+      <SearchBar onChange={handleSearch}></SearchBar>
+      {search.results.length > 0 && <SearchResults results={search.results} />}
+    </MainContainer>
   );
 };
 

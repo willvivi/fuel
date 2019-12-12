@@ -1,6 +1,6 @@
 import downloadAndExtractLatestPayload from "../services/PayloadService";
 import {
-  getFuelPricesByCity as getByCity,
+  getFuelPricesByAddress as getByAddress,
   getFuelPricesAround as getAround,
 } from "../services/FuelPricesService";
 import { Response, Request } from "express";
@@ -15,9 +15,9 @@ export const getFuelPricesFromGov = (req: Request, res: Response) => {
     });
 };
 
-export const getFuelPricesFromCity = (req: Request, res: Response) => {
-  if (req.body.city) {
-    getByCity(req.body.city)
+export const getFuelPricesFromAddress = (req: Request, res: Response) => {
+  if (req.body.city || req.body.address || req.body.postcode) {
+    getByAddress(req.body.address, req.body.postcode, req.body.city)
       .then(gasStations => {
         res.send(gasStations);
       })

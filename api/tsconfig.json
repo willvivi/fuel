@@ -14,9 +14,5 @@
       "*": ["node_modules/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "src/controllers/**/*",
-    "src/services/PayloadService.ts"
-  ]
+  "include": ["src/**/*"]
 }
