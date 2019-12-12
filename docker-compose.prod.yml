@@ -2,16 +2,14 @@ version: "3"
 
 services:
   front:
-    image: "node_front_fuel:latest"
-    build: "./front"
+    image: "node_front_fuel_prod:latest"
+    build:
+      context: "./front"
+      dockerfile: Prod.Dockerfile
     user: node
     environment:
-      - NODE_ENV=development
-      - PORT=5000
-    command: "npm start"
-    volumes:
-      - "./front:/home/node/app"
-      - "/home/node/app/node_modules"
+      - NODE_ENV=production
+    command: "serve -s build"
     working_dir: /home/node/app
     ports:
       - "8080:5000"
@@ -20,15 +18,14 @@ services:
     networks:
       - internal
   server:
-    image: "node_api_fuel:latest"
-    build: "./api"
+    image: "node_api_fuel_prod:latest"
+    build:
+      context: "./api"
+      dockerfile: Prod.Dockerfile
     user: node
     environment:
-      - NODE_ENV=development
-    command: "npm run dev"
-    volumes:
-      - "./api:/home/node/app"
-      - "/home/node/app/node_modules"
+      - NODE_ENV=production
+    command: "node dist/src/index.js"
     working_dir: /home/node/app
     ports:
       - "3000:8080"

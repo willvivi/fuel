@@ -251,6 +251,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                       </TableCell>
                       <TableCell>
                         <a
+                          rel="noopener noreferrer"
                           href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
                             " ",
                             "+"
