@@ -45,7 +45,7 @@ const App: React.FC = () => {
     <MainContainer>
       <Title>
         <LocalGasStationIcon />
-        &nbsp;Faire de l'essence&nbsp;
+        &nbsp;Faire de l'Essence&nbsp;
         <LocalGasStationIcon />
       </Title>
       <SearchBar onChange={handleSearch}></SearchBar>
