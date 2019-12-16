@@ -7,7 +7,7 @@ import router from "../services/ExpressRouterService";
 import cors from "cors";
 
 router.use(cors());
-router.get("/getFuelPricesFromGov", getFuelPricesFromGov);
+// router.get("/getFuelPricesFromGov", getFuelPricesFromGov);
 router.post("/getFuelPricesFromAddress", getFuelPricesFromAddress);
 router.post("/getFuelPricesAround", getFuelPricesAround);
 
