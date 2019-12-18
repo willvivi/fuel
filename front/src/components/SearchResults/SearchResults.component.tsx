@@ -82,7 +82,6 @@ const headCells: HeadCell[] = [
     id: "nom",
     label: "Station",
   },
-  { id: "services", label: "Services" },
   { id: "gazole", label: "Gazole" },
 
   { id: "sp95E10", label: "E10 (SP95)" },
@@ -97,6 +96,7 @@ const headCells: HeadCell[] = [
     id: "cp",
     label: "Code Postal",
   },
+  { id: "services", label: "Services" },
 ];
 
 interface EnhancedTableProps {
