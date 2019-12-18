@@ -1,5 +1,5 @@
 import {
-  getFuelPricesFromGov,
+  // getFuelPricesFromGov,
   getFuelPricesFromAddress,
   getFuelPricesAround,
 } from "../controllers/FuelPricesController";

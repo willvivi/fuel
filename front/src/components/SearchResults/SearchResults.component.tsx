@@ -82,13 +82,6 @@ const headCells: HeadCell[] = [
     id: "nom",
     label: "Station",
   },
-  { id: "marque", label: "Marque" },
-  { id: "adresse", label: "Adresse" },
-  { id: "ville", label: "Ville" },
-  {
-    id: "cp",
-    label: "Code Postal",
-  },
   { id: "services", label: "Services" },
   { id: "gazole", label: "Gazole" },
 
@@ -97,6 +90,13 @@ const headCells: HeadCell[] = [
   { id: "sp98", label: "E5 (SP98)" },
   { id: "e85", label: "E85" },
   { id: "gnv", label: "GPL" },
+  { id: "marque", label: "Marque" },
+  { id: "adresse", label: "Adresse" },
+  { id: "ville", label: "Ville" },
+  {
+    id: "cp",
+    label: "Code Postal",
+  },
 ];
 
 interface EnhancedTableProps {
@@ -242,37 +242,6 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           <span style={{ fontStyle: "italic" }}>Inconnu</span>
                         )}
                       </TableCell>
-                      <TableCell>
-                        {gasStation.marque ? (
-                          gasStation.nom
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>Inconnu</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <a
-                          rel="noopener noreferrer"
-                          href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
-                            " ",
-                            "+"
-                          )}+${gasStation.ville.replace(" ", "+")}+${
-                            gasStation.cp
-                          }`}
-                          target="_blank"
-                          style={{ color: "black" }}
-                        >
-                          {gasStation.adresse}
-                        </a>
-                      </TableCell>
-                      <TableCell>{gasStation.ville}</TableCell>
-                      <TableCell>{gasStation.cp}</TableCell>
-                      <TableCell>
-                        {gasStation.services.service.map(service => (
-                          <Tooltip title={service}>
-                            {getService(service)}
-                          </Tooltip>
-                        ))}
-                      </TableCell>
                       <TableCell
                         className={
                           gasStation.gazole === 0 ? classes.unavailable : ""
@@ -350,6 +319,37 @@ const SearchResults: React.FC<SearchResultsProps> = (
                             Carburant indisp.
                           </span>
                         )}
+                      </TableCell>
+                      <TableCell>
+                        {gasStation.marque ? (
+                          gasStation.nom
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>Inconnu</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <a
+                          rel="noopener noreferrer"
+                          href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
+                            " ",
+                            "+"
+                          )}+${gasStation.ville.replace(" ", "+")}+${
+                            gasStation.cp
+                          }`}
+                          target="_blank"
+                          style={{ color: "black" }}
+                        >
+                          {gasStation.adresse}
+                        </a>
+                      </TableCell>
+                      <TableCell>{gasStation.ville}</TableCell>
+                      <TableCell>{gasStation.cp}</TableCell>
+                      <TableCell>
+                        {gasStation.services.service.map(service => (
+                          <Tooltip title={service}>
+                            {getService(service)}
+                          </Tooltip>
+                        ))}
                       </TableCell>
                     </TableRow>
                   );
