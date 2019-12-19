@@ -185,7 +185,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
 ) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<string>("postcode");
+  const [orderBy, setOrderBy] = React.useState<string>("gazole");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
