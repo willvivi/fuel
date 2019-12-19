@@ -209,6 +209,6 @@ const ensureReadFileSync = (filePath: string): Buffer => {
   return result;
 };
 
-cron.schedule("* * 23 * *", downloadAndExtractLatestPayload);
+cron.schedule("40 11 0 * *", downloadAndExtractLatestPayload);
 
 export default downloadAndExtractLatestPayload;
