@@ -89,12 +89,9 @@ const headCells: HeadCell[] = [
   { id: "sp98", label: "E5 (SP98)" },
   { id: "e85", label: "E85" },
   { id: "gnv", label: "GPL" },
-  { id: "marque", label: "Marque" },
-  { id: "adresse", label: "Adresse" },
-  { id: "ville", label: "Ville" },
   {
     id: "cp",
-    label: "Code Postal",
+    label: "Adresse / CP",
   },
   { id: "services", label: "Services" },
 ];
@@ -240,7 +237,11 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.nom
                         ) : (
                           <span style={{ fontStyle: "italic" }}>Inconnu</span>
-                        )}
+                        )}{" "}
+                        {gasStation.marque &&
+                          gasStation.nom &&
+                          gasStation.marque !== gasStation.nom &&
+                          " - " + gasStation.marque}
                       </TableCell>
                       <TableCell
                         className={
@@ -321,13 +322,6 @@ const SearchResults: React.FC<SearchResultsProps> = (
                         )}
                       </TableCell>
                       <TableCell>
-                        {gasStation.marque ? (
-                          gasStation.nom
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>Inconnu</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
                         <a
                           rel="noopener noreferrer"
                           href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
@@ -340,10 +334,9 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           style={{ color: "black" }}
                         >
                           {gasStation.adresse}
-                        </a>
+                        </a>{" "}
+                        {gasStation.ville} {gasStation.cp}
                       </TableCell>
-                      <TableCell>{gasStation.ville}</TableCell>
-                      <TableCell>{gasStation.cp}</TableCell>
                       <TableCell>
                         {gasStation.services.service.map(service => (
                           <Tooltip title={service}>
