@@ -33,7 +33,20 @@ services:
       - internal
     depends_on:
       - mongo
-
+  cron:
+    image: "node_cron_fuel_prod:latest"
+    build:
+      context: "./cron"
+      dockerfile: Prod.Dockerfile
+    user: node
+    environment:
+      - NODE_ENV=production
+    command: "node dist/index.js"
+    working_dir: /home/node/app
+    networks:
+      - internal
+    depends_on:
+      - mongo
   mongo:
     image: mongo
     restart: unless-stopped

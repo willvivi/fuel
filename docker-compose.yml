@@ -36,6 +36,21 @@ services:
       - internal
     depends_on:
       - mongo
+  cron:
+    image: "node_cron_fuel:latest"
+    build: "./cron"
+    user: node
+    environment:
+      - NODE_ENV=development
+    command: "npm run dev"
+    volumes:
+      - "./cron:/home/node/app"
+      - "/home/node/app/node_modules"
+    working_dir: /home/node/app
+    networks:
+      - internal
+    depends_on:
+      - mongo
   mongo:
     image: mongo
     restart: unless-stopped

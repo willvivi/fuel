@@ -1,7 +1,7 @@
 import downloadAndExtractPayload from "./PayloadService";
 import mongoose from "mongoose";
 
-const dbURL: string = "mongodb://localhost:27017/fuel";
+const dbURL: string = "mongodb://mongo:27017/fuel";
 
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
