@@ -3,6 +3,16 @@ import mongoose from "mongoose";
 
 const dbURL: string = "mongodb://mongo:27017/fuel";
 
+const date = new Date();
+
+console.log(
+  `CRON FUEL: ${date.getFullYear()}-${
+    date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+  }-${date.getDate()} at ${date.getHours()}:${date.getMinutes()}:${
+    date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+  }`
+);
+
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
