@@ -15,8 +15,14 @@ mongoose.connection.on("open", () => {
   downloadAndExtractPayload()
     .then(msg => {
       console.log(msg);
+      if (process.env.NODE_ENV === "production") {
+        process.exit();
+      }
     })
     .catch(err => {
       console.log(err);
+      if (process.env.NODE_ENV === "production") {
+        process.exit(1);
+      }
     });
 });
