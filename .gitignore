@@ -69,3 +69,6 @@ typings/
 # build folders
 /front/build
 /api/dist
+/api/assets/extracts
+/cron/dist
+/cron/assets/extracts
