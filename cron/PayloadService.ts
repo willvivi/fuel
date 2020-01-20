@@ -143,7 +143,6 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 console.error("err ", error);
                 reject("Database update failed.");
               }
-              console.log("Database successfully updated");
               resolve("Database successfully updated");
             });
           });
