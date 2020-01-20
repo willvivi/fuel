@@ -52,8 +52,8 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 - If you run into MSBuild errors, launch a PowerShell as administrator and install `windows-build-tools` using this command: `npm install -g --production windows-build-tools`
 
-Server will run on `localhost` on port `3000`.
+Server will run on `localhost/api`.
 
-Front will run on `localhost` on port `8080`.
+Front will run on `localhost`.
 
 Postman config export is available at the root of the repository.
