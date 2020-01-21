@@ -13,7 +13,7 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 - ~~Put the API online,~~ preferably with some CI/CD tools hooked to this repository.
 - ~~Build a simple user friendly front page allowing to request the API trough a dynamic form or geolocation.~~
 - ~~Dockerize the API, MongoDB and the front.~~
-- Use the PayloadService as a CRON, and not as an API call.
+- ~~Use the PayloadService as a CRON, and not as an API call.~~
 - GDPR
 
 #### Code
