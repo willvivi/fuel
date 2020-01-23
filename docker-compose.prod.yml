@@ -25,7 +25,7 @@ services:
     user: node
     environment:
       - NODE_ENV=production
-    command: "node dist/src/index.js"
+    command: "node dist/index.js"
     working_dir: /home/node/app
     ports:
       - "3000:8080"
