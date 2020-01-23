@@ -1,4 +1,3 @@
-import downloadAndExtractLatestPayload from "../services/PayloadService";
 import {
   getFuelPricesByAddress as getByAddress,
   getFuelPricesAround as getAround,
