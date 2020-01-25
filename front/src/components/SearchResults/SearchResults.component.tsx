@@ -33,8 +33,10 @@ import LocalBarIcon from "@material-ui/icons/LocalBar";
 import BathtubIcon from "@material-ui/icons/Bathtub";
 import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import { IToggles } from "../../models/Search";
 
 interface SearchResultsProps {
+  toggles: IToggles;
   results: IGasStation[];
 }
 
@@ -75,26 +77,8 @@ function getSorting<K extends keyof any>(
 interface HeadCell {
   id: string;
   label: string;
+  show: boolean;
 }
-
-const headCells: HeadCell[] = [
-  {
-    id: "nom",
-    label: "Station",
-  },
-  { id: "gazole", label: "Gazole" },
-
-  { id: "sp95E10", label: "E10 (SP95)" },
-  { id: "sp95", label: "E5 (SP95)" },
-  { id: "sp98", label: "E5 (SP98)" },
-  { id: "e85", label: "E85" },
-  { id: "gnv", label: "GPL" },
-  {
-    id: "cp",
-    label: "Adresse / CP",
-  },
-  { id: "services", label: "Services" },
-];
 
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
@@ -102,6 +86,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
+  toggles: IToggles;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -112,30 +97,56 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort(event, property);
   };
 
+  const headCells: HeadCell[] = [
+    {
+      id: "nom",
+      label: "Station",
+      show: true,
+    },
+    { id: "gazole", label: "Gazole", show: props.toggles.Gazole },
+
+    { id: "sp95E10", label: "E10 (SP95)", show: props.toggles.SP95E10 },
+    { id: "sp95", label: "E5 (SP95)", show: props.toggles.SP95 },
+    { id: "sp98", label: "E5 (SP98)", show: props.toggles.SP98 },
+    { id: "e85", label: "E85", show: props.toggles.E85 },
+    { id: "gnv", label: "GPL", show: props.toggles.GNV },
+    {
+      id: "cp",
+      label: "Adresse / CP",
+      show: true,
+    },
+    { id: "services", label: "Services", show: true },
+  ];
+
   return (
     <TableHead>
       <TableRow>
-        {headCells.map(headCell => (
-          <TableCell
-            key={headCell.id}
-            align="left"
-            padding="default"
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={order}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+        {headCells.map(
+          headCell =>
+            headCell.show && (
+              <TableCell
+                key={headCell.id}
+                align="left"
+                padding="default"
+                sortDirection={orderBy === headCell.id ? order : false}
+              >
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={order}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <span className={classes.visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </span>
+                  ) : null}
+                </TableSortLabel>
+              </TableCell>
+            )
+        )}
       </TableRow>
     </TableHead>
   );
@@ -222,6 +233,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
               rowCount={props.results.length}
+              toggles={props.toggles}
             />
             <TableBody>
               {stableSort<any>(
@@ -243,84 +255,96 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.marque !== gasStation.nom &&
                           " - " + gasStation.marque}
                       </TableCell>
-                      <TableCell
-                        className={
-                          gasStation.gazole === 0 ? classes.unavailable : ""
-                        }
-                      >
-                        {gasStation.gazole > 0 ? (
-                          gasStation.gazole
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>
-                            Carburant indisp.
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          gasStation.sp95E10 === 0 ? classes.unavailable : ""
-                        }
-                      >
-                        {gasStation.sp95E10 > 0 ? (
-                          gasStation.sp95E10
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>
-                            Carburant indisp.
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          gasStation.sp95 === 0 ? classes.unavailable : ""
-                        }
-                      >
-                        {gasStation.sp95 > 0 ? (
-                          gasStation.sp95
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>
-                            Carburant indisp.
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          gasStation.sp98 === 0 ? classes.unavailable : ""
-                        }
-                      >
-                        {gasStation.sp98 > 0 ? (
-                          gasStation.sp98
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>
-                            Carburant indisp.
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          gasStation.e85 === 0 ? classes.unavailable : ""
-                        }
-                      >
-                        {gasStation.e85 > 0 ? (
-                          gasStation.e85
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>
-                            Carburant indisp.
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          gasStation.gnv === 0 ? classes.unavailable : ""
-                        }
-                      >
-                        {gasStation.gnv > 0 ? (
-                          gasStation.gnv
-                        ) : (
-                          <span style={{ fontStyle: "italic" }}>
-                            Carburant indisp.
-                          </span>
-                        )}
-                      </TableCell>
+                      {props.toggles.Gazole && (
+                        <TableCell
+                          className={
+                            gasStation.gazole === 0 ? classes.unavailable : ""
+                          }
+                        >
+                          {gasStation.gazole > 0 ? (
+                            gasStation.gazole
+                          ) : (
+                            <span style={{ fontStyle: "italic" }}>
+                              Carburant indisp.
+                            </span>
+                          )}
+                        </TableCell>
+                      )}
+                      {props.toggles.SP95E10 && (
+                        <TableCell
+                          className={
+                            gasStation.sp95E10 === 0 ? classes.unavailable : ""
+                          }
+                        >
+                          {gasStation.sp95E10 > 0 ? (
+                            gasStation.sp95E10
+                          ) : (
+                            <span style={{ fontStyle: "italic" }}>
+                              Carburant indisp.
+                            </span>
+                          )}
+                        </TableCell>
+                      )}
+                      {props.toggles.SP95 && (
+                        <TableCell
+                          className={
+                            gasStation.sp95 === 0 ? classes.unavailable : ""
+                          }
+                        >
+                          {gasStation.sp95 > 0 ? (
+                            gasStation.sp95
+                          ) : (
+                            <span style={{ fontStyle: "italic" }}>
+                              Carburant indisp.
+                            </span>
+                          )}
+                        </TableCell>
+                      )}
+                      {props.toggles.SP98 && (
+                        <TableCell
+                          className={
+                            gasStation.sp98 === 0 ? classes.unavailable : ""
+                          }
+                        >
+                          {gasStation.sp98 > 0 ? (
+                            gasStation.sp98
+                          ) : (
+                            <span style={{ fontStyle: "italic" }}>
+                              Carburant indisp.
+                            </span>
+                          )}
+                        </TableCell>
+                      )}
+                      {props.toggles.E85 && (
+                        <TableCell
+                          className={
+                            gasStation.e85 === 0 ? classes.unavailable : ""
+                          }
+                        >
+                          {gasStation.e85 > 0 ? (
+                            gasStation.e85
+                          ) : (
+                            <span style={{ fontStyle: "italic" }}>
+                              Carburant indisp.
+                            </span>
+                          )}
+                        </TableCell>
+                      )}
+                      {props.toggles.GNV && (
+                        <TableCell
+                          className={
+                            gasStation.gnv === 0 ? classes.unavailable : ""
+                          }
+                        >
+                          {gasStation.gnv > 0 ? (
+                            gasStation.gnv
+                          ) : (
+                            <span style={{ fontStyle: "italic" }}>
+                              Carburant indisp.
+                            </span>
+                          )}
+                        </TableCell>
+                      )}
                       <TableCell>
                         <a
                           rel="noopener noreferrer"
