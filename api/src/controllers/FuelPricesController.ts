@@ -1,19 +1,8 @@
-import downloadAndExtractLatestPayload from "../services/PayloadService";
 import {
   getFuelPricesByAddress as getByAddress,
   getFuelPricesAround as getAround,
 } from "../services/FuelPricesService";
 import { Response, Request } from "express";
-
-export const getFuelPricesFromGov = (req: Request, res: Response) => {
-  downloadAndExtractLatestPayload()
-    .then(jobResult => {
-      res.send({ message: jobResult });
-    })
-    .catch(reason => {
-      res.status(500).send({ error: reason });
-    });
-};
 
 export const getFuelPricesFromAddress = (req: Request, res: Response) => {
   if (req.body.city || req.body.address || req.body.postcode) {

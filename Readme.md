@@ -13,7 +13,8 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 - ~~Put the API online,~~ preferably with some CI/CD tools hooked to this repository.
 - ~~Build a simple user friendly front page allowing to request the API trough a dynamic form or geolocation.~~
 - ~~Dockerize the API, MongoDB and the front.~~
-- Use the PayloadService as a CRON, and not as an API call.
+- ~~Use the PayloadService as a CRON, and not as an API call.~~
+- GDPR
 
 #### Code
 
@@ -51,8 +52,8 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 - If you run into MSBuild errors, launch a PowerShell as administrator and install `windows-build-tools` using this command: `npm install -g --production windows-build-tools`
 
-Server will run on `localhost` on port `3000`.
+Server will run on `localhost/api`.
 
-Front will run on `localhost` on port `8080`.
+Front will run on `localhost`.
 
 Postman config export is available at the root of the repository.

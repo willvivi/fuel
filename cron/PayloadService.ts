@@ -7,8 +7,9 @@ import GasStation, {
   IFuel,
   IFuels,
   IGasStationSource,
-} from "../models/GasStation";
-import stations_2018 from "../../assets/json/stations_2018.json";
+} from "./models/GasStation";
+import stations_2018 from "./assets/json/stations_2018.json";
+import https from "https";
 
 const getCurrentDate = (): string => {
   const date = new Date();
@@ -34,6 +35,9 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
     console.log("Getting latest archive from prix-carburants.gouv.fr...");
     axios({
       method: "GET",
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false,
+      }),
       responseType: "stream",
       url,
     })
@@ -44,6 +48,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
         console.error(err);
         reject("Couldn't fetch xml payload from prix-carburants.gouv.fr");
       });
+
     master.on("finish", () => {
       console.log("Finished downloading. Unzipping...");
       const zip = new admZip(path);
@@ -138,7 +143,6 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 console.error("err ", error);
                 reject("Database update failed.");
               }
-              console.log("Database successfully updated");
               resolve("Database successfully updated");
             });
           });
