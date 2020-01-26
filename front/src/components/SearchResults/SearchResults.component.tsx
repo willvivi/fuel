@@ -4,7 +4,9 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
+import TablePagination, {
+  LabelDisplayedRowsArgs,
+} from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
@@ -105,9 +107,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     },
     { id: "gazole", label: "Gazole", show: props.toggles.Gazole },
 
-    { id: "sp95E10", label: "E10 (SP95)", show: props.toggles.SP95E10 },
-    { id: "sp95", label: "E5 (SP95)", show: props.toggles.SP95 },
-    { id: "sp98", label: "E5 (SP98)", show: props.toggles.SP98 },
+    { id: "sp95E10", label: "SP95-E10", show: props.toggles.SP95E10 },
+    { id: "sp95", label: "SP95", show: props.toggles.SP95 },
+    { id: "sp98", label: "SP98", show: props.toggles.SP98 },
     { id: "e85", label: "E85", show: props.toggles.E85 },
     { id: "gnv", label: "GPL", show: props.toggles.GNV },
     {
@@ -381,12 +383,17 @@ const SearchResults: React.FC<SearchResultsProps> = (
         count={props.results.length}
         rowsPerPage={rowsPerPage}
         page={page}
+        labelRowsPerPage="Nb/Page"
+        labelDisplayedRows={LabelDisplayedRows}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </div>
   );
 };
+
+const LabelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs) =>
+  `${from}-${to === -1 ? count : to}/${count}`;
 
 export default SearchResults;
 

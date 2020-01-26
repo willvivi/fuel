@@ -111,8 +111,8 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
       <Divider />
       <span style={{ marginTop: "10px" }}>Géolocalisation</span>
       <GeolocationFields>
-        <Button variant="contained" id="geolocation" onClick={handleClick}>
-          Localisez-moi !
+        <Button variant="contained" id="reset" onClick={handleClick}>
+          Réinitialiser
         </Button>
         <StyledTextField
           type="number"
@@ -122,22 +122,24 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           onChange={handleChange}
         />
         <Button
-          color="secondary"
+          color="primary"
           variant="contained"
-          id="reset"
+          id="geolocation"
           onClick={handleClick}
         >
-          Réinitialiser
+          Localisez-moi !
         </Button>{" "}
       </GeolocationFields>
       <Divider />
       <span style={{ marginTop: "10px" }}>Affichage</span>
-      <FormGroup row>
+      <FormGroup row style={{ justifyContent: "center" }}>
         <FormControlLabel
           control={
             <Checkbox
               checked={toggles.Gazole}
               onChange={handleToggle}
+              color="default"
+              style={{ color: "#e8e52e" }}
               id="Gazole"
               value="Gazole"
             />
@@ -149,6 +151,8 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             <Checkbox
               checked={toggles.SP95E10}
               onChange={handleToggle}
+              color="default"
+              style={{ color: "#5cb94b" }}
               id="SP95E10"
               value="SP95E10"
             />
@@ -159,6 +163,8 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           control={
             <Checkbox
               checked={toggles.SP95}
+              color="default"
+              style={{ color: "#214a24" }}
               onChange={handleToggle}
               id="SP95"
               value="SP95"
@@ -170,6 +176,8 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
           control={
             <Checkbox
               checked={toggles.SP98}
+              color="default"
+              style={{ color: "#214a24" }}
               onChange={handleToggle}
               id="SP98"
               value="SP98"
@@ -182,6 +190,8 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             <Checkbox
               checked={toggles.GNV}
               onChange={handleToggle}
+              color="default"
+              style={{ color: "#206a94" }}
               id="GNV"
               value="GNV"
             />
@@ -193,11 +203,13 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             <Checkbox
               checked={toggles.E85}
               onChange={handleToggle}
+              color="default"
+              style={{ color: "#4fc0d4" }}
               id="E85"
               value="E85"
             />
           }
-          label="E85"
+          label="Superéthanol E85"
         />
       </FormGroup>
     </Container>

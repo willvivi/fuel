@@ -21,6 +21,7 @@ export const AddressFields = styled.div`
   justify-content: center;
   @media (max-width: 500px) {
     flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -32,5 +33,6 @@ export const GeolocationFields = styled.div`
   margin-bottom: 10px;
   @media (max-width: 500px) {
     flex-direction: column;
+    align-items: center;
   }
 `;

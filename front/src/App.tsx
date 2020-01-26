@@ -6,13 +6,18 @@ import {
   getGasStationsByCoordinates,
 } from "./services/GasStationService";
 import SearchResults from "./components/SearchResults/SearchResults.component";
-import { MainContainer, Title } from "./App.style";
+import { MainContainer } from "./App.style";
 import ISearch, {
   initialISearch,
   IToggles,
   initialIToggles,
 } from "./models/Search";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
 import LocalGasStationIcon from "@material-ui/icons/LocalGasStation";
+// import MenuIcon from "@material-ui/icons/Menu";
 
 const App: React.FC = () => {
   const [search, setSearch] = useState<ISearch>(initialISearch);
@@ -53,11 +58,15 @@ const App: React.FC = () => {
 
   return (
     <MainContainer>
-      <Title>
-        <LocalGasStationIcon />
-        &nbsp;Faire de l'Essence&nbsp;
-        <LocalGasStationIcon />
-      </Title>
+      <AppBar style={{ marginBottom: "15px" }} position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <LocalGasStationIcon />
+            {/* <MenuIcon /> */}
+          </IconButton>
+          <Typography variant="h6">Faire de l'Essence</Typography>
+        </Toolbar>
+      </AppBar>
       <SearchBar
         onChange={handleSearch}
         onChangeToggles={handleToggles}
