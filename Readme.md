@@ -10,11 +10,11 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 #### Generalities / Infrastructure
 
-- ~~Put the API online,~~ preferably with some CI/CD tools hooked to this repository.
+- ~~Put the API online~~
 - ~~Build a simple user friendly front page allowing to request the API trough a dynamic form or geolocation.~~
 - ~~Dockerize the API, MongoDB and the front.~~
 - ~~Use the PayloadService as a CRON, and not as an API call.~~
-- GDPR
+- Azure DevOps pipelines
 
 #### Code
 
@@ -23,6 +23,7 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 - ~~Write tests for the API (TDD unfortunately not applied as I didn't have a clear idea of the features)~~
 - Weird typing on the GasStations Mongoose model on the "city" field, should be `String` but it is mandatory to use `JSON` instead.
 - Use a proper logging solution (eg. Winston) on the PayloadService.
+- Display update dates on fuels.
 
 ## Instructions
 
@@ -34,6 +35,10 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 ### Running the project
 
 - Run `docker-compose up` from the root of the repository
+
+  OR (not recommended)
+
+- Install node and start project using scripts in package.json. This is not recommended as it will keep you from having the same environment as production locally. Use this solution only if you encounter severe problems with Docker.
 
 ### Testing the project
 
@@ -48,7 +53,7 @@ Straightforward API built on Node with TypeScript and Express.js / Mongoose.
 
 - Run `docker-compose -f docker-compose.prod.yml build`, then `docker-compose -f docker-compose.prod.yml up`
 
-#### On Windows
+#### Build errors on Windows (outside Docker)
 
 - If you run into MSBuild errors, launch a PowerShell as administrator and install `windows-build-tools` using this command: `npm install -g --production windows-build-tools`
 
