@@ -15,6 +15,7 @@ import Divider from "@material-ui/core/Divider";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import { VariantType, useSnackbar } from "notistack";
 
 interface SearchBarProps {
   onChange: (search: ISearch) => void;
@@ -24,6 +25,11 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const [search, setSearch] = useState<ISearch>(initialISearch);
   const [toggles, setToggles] = useState<IToggles>(initialIToggles);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleVariantSnackBar = (message: string, variant: VariantType) => {
+    enqueueSnackbar(message, { variant });
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.currentTarget.id) {
@@ -56,13 +62,33 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     switch (e.currentTarget.id) {
       case "geolocation":
-        navigator.geolocation.getCurrentPosition((position: Position) => {
-          setSearch({
-            ...initialISearch,
-            radius: search.radius,
-            location: [position.coords.latitude, position.coords.longitude],
-          });
-        });
+        handleVariantSnackBar("Récupération de votre position...", "warning");
+        navigator.geolocation.getCurrentPosition(
+          (position: Position) => {
+            console.log(position);
+            setSearch({
+              ...initialISearch,
+              radius: search.radius,
+              location: [position.coords.latitude, position.coords.longitude],
+            });
+          },
+          (error: PositionError) => {
+            switch (error.code) {
+              case 1:
+                handleVariantSnackBar(
+                  "Vous n'avez pas autorisé la géolocalisation sur votre périphérique",
+                  "error"
+                );
+                break;
+              default:
+                handleVariantSnackBar(
+                  "Erreur inattendue survenue lors de la géolocalisation",
+                  "error"
+                );
+                break;
+            }
+          }
+        );
         break;
       case "reset":
         setSearch(initialISearch);
@@ -91,7 +117,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   return (
     <Container>
-      <span>Recherche</span>
+      <span>Recherche (automatique)</span>
       <AddressFields>
         <StyledTextField
           type="text"
