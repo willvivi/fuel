@@ -6,7 +6,6 @@ services:
     build:
       context: "./front"
       dockerfile: Prod.Dockerfile
-    user: nginx
     environment:
       - NODE_ENV=production
     working_dir: /home/node/app
