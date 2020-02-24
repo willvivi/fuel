@@ -1,6 +1,6 @@
-FROM node:10
-WORKDIR /home/node/app
+FROM nginx:1.17.8-alpine
+WORKDIR /home/app
 COPY ./ .
-RUN npm install -g serve
-RUN npm install
 RUN npm run build 
+COPY build /usr/share/nginx/html
+
