@@ -4,5 +4,5 @@ COPY ./ .
 RUN apk add --update nodejs npm
 RUN npm install
 RUN npm run build 
-COPY build /usr/share/nginx/html
+RUN cp -R build/* /usr/share/nginx/html/
 
