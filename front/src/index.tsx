@@ -19,7 +19,7 @@ ReactDOM.render(
       horizontal: "center",
     }}
     action={key => <Button onClick={onClickDismiss(key)}>Cacher</Button>}
-    maxSnack={3}
+    maxSnack={2}
   >
     <App />{" "}
   </SnackbarProvider>,
