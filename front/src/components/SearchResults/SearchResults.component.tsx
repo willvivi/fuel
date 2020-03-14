@@ -37,6 +37,8 @@ import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { IToggles } from "../../models/Search";
 
+import { format, Locale } from "date-fns";
+
 interface SearchResultsProps {
   toggles: IToggles;
   results: IGasStation[];
@@ -264,12 +266,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.gazole > 0 ? (
-                            gasStation.gazole
+                            gasStation.gazole + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.gazole &&
+                            getFormattedDate(gasStation.lastUpdate.gazole)}
                         </TableCell>
                       )}
                       {props.toggles.SP95E10 && (
@@ -279,12 +283,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.sp95E10 > 0 ? (
-                            gasStation.sp95E10
+                            gasStation.sp95E10 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.sp95E10 &&
+                            getFormattedDate(gasStation.lastUpdate.sp95E10)}
                         </TableCell>
                       )}
                       {props.toggles.SP95 && (
@@ -294,12 +300,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.sp95 > 0 ? (
-                            gasStation.sp95
+                            gasStation.sp95 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.sp95 &&
+                            getFormattedDate(gasStation.lastUpdate.sp95)}
                         </TableCell>
                       )}
                       {props.toggles.SP98 && (
@@ -309,12 +317,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.sp98 > 0 ? (
-                            gasStation.sp98
+                            gasStation.sp98 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.sp98 &&
+                            getFormattedDate(gasStation.lastUpdate.sp98)}
                         </TableCell>
                       )}
                       {props.toggles.E85 && (
@@ -324,12 +334,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.e85 > 0 ? (
-                            gasStation.e85
+                            gasStation.e85 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.e85 &&
+                            getFormattedDate(gasStation.lastUpdate.e85)}
                         </TableCell>
                       )}
                       {props.toggles.GNV && (
@@ -339,12 +351,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.gnv > 0 ? (
-                            gasStation.gnv
+                            gasStation.gnv + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.gnv &&
+                            getFormattedDate(gasStation.lastUpdate.gnv)}
                         </TableCell>
                       )}
                       <TableCell>
@@ -395,7 +409,15 @@ const SearchResults: React.FC<SearchResultsProps> = (
 const LabelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs) =>
   `${from}-${to === -1 ? count : to}/${count}`;
 
-export default SearchResults;
+const getFormattedDate: Function = (ISODate: string): JSX.Element => (
+  <div style={{ fontSize: "0.8em", fontStyle: "italic" }}>
+    {format(
+      new Date(ISODate),
+      "dd/MM/yy' \
+                                 à 'kk:mm"
+    )}
+  </div>
+);
 
 const getService: Function = (service: string): JSX.Element => {
   switch (service) {
@@ -455,3 +477,5 @@ const getService: Function = (service: string): JSX.Element => {
       return <HelpOutlineIcon />;
   }
 };
+
+export default SearchResults;

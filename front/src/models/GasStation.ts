@@ -2,6 +2,15 @@ export interface IServices {
   service: string[];
 }
 
+export interface ILastUpdateFuels {
+  gnv: Date;
+  sp95E10: Date;
+  sp95: Date;
+  sp98: Date;
+  e85: Date;
+  gazole: Date;
+}
+
 export interface IFuels {
   gnv: number;
   sp95E10: number;
@@ -9,6 +18,7 @@ export interface IFuels {
   sp98: number;
   e85: number;
   gazole: number;
+  lastUpdate: ILastUpdateFuels;
 }
 
 interface IGeoJSON {
