@@ -7,6 +7,7 @@ import GasStation, {
   IFuel,
   IFuels,
   IGasStationSource,
+  ILastUpdateFuels,
 } from "./models/GasStation";
 import stations_2018 from "./assets/json/stations_2018.json";
 import https from "https";
@@ -90,6 +91,15 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                   return parseInt(gasStation.id, 10) === station.id;
                 });
 
+                const initialLastUpdateFuels: ILastUpdateFuels = {
+                  gnv: "",
+                  sp95E10: "",
+                  sp95: "",
+                  sp98: "",
+                  e85: "",
+                  gazole: "",
+                };
+
                 const fuels: IFuels = {
                   gnv: 0,
                   sp95E10: 0,
@@ -97,6 +107,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                   sp98: 0,
                   e85: 0,
                   gazole: 0,
+                  lastUpdate: initialLastUpdateFuels,
                 };
 
                 if (Array.isArray(gasStation.prix)) {
@@ -104,21 +115,33 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                     switch (prix.nom) {
                       case "E10":
                         fuels.sp95E10 = prix.valeur;
+                        const datesp95E10 = new Date(prix.maj);
+                        fuels.lastUpdate.sp95E10 = datesp95E10.toISOString();
                         break;
                       case "SP95":
                         fuels.sp95 = prix.valeur;
+                        const datesp95 = new Date(prix.maj);
+                        fuels.lastUpdate.sp95 = datesp95.toISOString();
                         break;
                       case "SP98":
                         fuels.sp98 = prix.valeur;
+                        const datesp98 = new Date(prix.maj);
+                        fuels.lastUpdate.sp98 = datesp98.toISOString();
                         break;
                       case "E85":
                         fuels.e85 = prix.valeur;
+                        const datee85 = new Date(prix.maj);
+                        fuels.lastUpdate.e85 = datee85.toISOString();
                         break;
                       case "Gazole":
                         fuels.gazole = prix.valeur;
+                        const dategazole = new Date(prix.maj);
+                        fuels.lastUpdate.gazole = dategazole.toISOString();
                         break;
                       case "GPLc":
                         fuels.gnv = prix.valeur;
+                        const dategnv = new Date(prix.maj);
+                        fuels.lastUpdate.gnv = dategnv.toISOString();
                         break;
                     }
                   });
