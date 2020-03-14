@@ -4,6 +4,7 @@ import {
   AddressFields,
   GeolocationFields,
   StyledTextField,
+  SettingsFields,
 } from "./SearchBar.style";
 import ISearch, {
   initialISearch,
@@ -17,15 +18,32 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { VariantType, useSnackbar } from "notistack";
 
+import MyLocation from "@material-ui/icons/MyLocation";
+import Search from "@material-ui/icons/Search";
+import Settings from "@material-ui/icons/Settings";
+
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+
 interface SearchBarProps {
   onChange: (search: ISearch) => void;
   onChangeToggles: (toggles: IToggles) => void;
 }
 
+const useStyles = makeStyles({
+  root: {
+    padding: "10px",
+  },
+});
+
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const [search, setSearch] = useState<ISearch>(initialISearch);
   const [toggles, setToggles] = useState<IToggles>(initialIToggles);
+  const [currentTab, setCurrentTab] = useState<number>(0);
   const { enqueueSnackbar } = useSnackbar();
+  const classes = useStyles();
 
   const handleVariantSnackBar = (message: string, variant: VariantType) => {
     enqueueSnackbar(message, { variant });
@@ -92,11 +110,16 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         break;
       case "reset":
         setSearch(initialISearch);
+        setToggles(initialIToggles);
         break;
       default:
         setSearch(initialISearch);
         break;
     }
+  };
+
+  const handleTabs = (_: React.ChangeEvent<{}>, newTab: number) => {
+    setCurrentTab(newTab);
   };
 
   useEffect(() => {
@@ -117,127 +140,150 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   return (
     <Container>
-      <span>Recherche (automatique)</span>
-      <AddressFields>
-        <StyledTextField
-          type="text"
-          id="postcode"
-          label="Code Postal / Dpt"
-          value={search.postcode}
-          onChange={handleChange}
-        />
-        <StyledTextField
-          type="text"
-          id="city"
-          label="Ville"
-          value={search.city}
-          onChange={handleChange}
-        />
-      </AddressFields>
-      <Divider />
-      <span style={{ marginTop: "10px" }}>Géolocalisation</span>
-      <GeolocationFields>
-        <Button variant="contained" id="reset" onClick={handleClick}>
-          Réinitialiser
-        </Button>
-        <StyledTextField
-          type="number"
-          label="Distance max. (km)"
-          id="radius"
-          value={search.radius}
-          onChange={handleChange}
-        />
-        <Button
-          color="primary"
-          variant="contained"
-          id="geolocation"
-          onClick={handleClick}
+      <Paper square className={classes.root}>
+        <Tabs
+          value={currentTab}
+          onChange={handleTabs}
+          variant="fullWidth"
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="icon label tabs example"
         >
-          Localisez-moi !
-        </Button>{" "}
-      </GeolocationFields>
-      <Divider />
-      <span style={{ marginTop: "10px" }}>Affichage</span>
-      <FormGroup row style={{ justifyContent: "center" }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.Gazole}
-              onChange={handleToggle}
-              color="default"
-              style={{ color: "#e8e52e" }}
-              id="Gazole"
-              value="Gazole"
+          <Tab icon={<Search />} label="Recherche" />
+          <Tab icon={<MyLocation />} label="Autour" />
+          <Tab icon={<Settings />} label="Affichage" />
+        </Tabs>
+        {currentTab === 0 && (
+          <AddressFields>
+            <StyledTextField
+              type="text"
+              id="postcode"
+              label="Département ou CP"
+              value={search.postcode}
+              onChange={handleChange}
             />
-          }
-          label="Gazole"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.SP95E10}
-              onChange={handleToggle}
-              color="default"
-              style={{ color: "#5cb94b" }}
-              id="SP95E10"
-              value="SP95E10"
+            <StyledTextField
+              type="text"
+              id="city"
+              label="Ville"
+              value={search.city}
+              onChange={handleChange}
             />
-          }
-          label="SP95-E10"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.SP95}
-              color="default"
-              style={{ color: "#214a24" }}
-              onChange={handleToggle}
-              id="SP95"
-              value="SP95"
-            />
-          }
-          label="SP95"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.SP98}
-              color="default"
-              style={{ color: "#214a24" }}
-              onChange={handleToggle}
-              id="SP98"
-              value="SP98"
-            />
-          }
-          label="SP98"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.GNV}
-              onChange={handleToggle}
-              color="default"
-              style={{ color: "#206a94" }}
-              id="GNV"
-              value="GNV"
-            />
-          }
-          label="GPL"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.E85}
-              onChange={handleToggle}
-              color="default"
-              style={{ color: "#4fc0d4" }}
-              id="E85"
-              value="E85"
-            />
-          }
-          label="Superéthanol E85"
-        />
-      </FormGroup>
+          </AddressFields>
+        )}
+        {currentTab === 1 && (
+          <GeolocationFields>
+            <StyledTextField
+              type="number"
+              label="Distance max. (km)"
+              id="radius"
+              value={search.radius}
+              onChange={handleChange}
+            />{" "}
+            <Button
+              color="primary"
+              variant="contained"
+              id="geolocation"
+              onClick={handleClick}
+              size="medium"
+            >
+              Localisez-moi !
+            </Button>
+          </GeolocationFields>
+        )}
+        {currentTab === 2 && (
+          <SettingsFields>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.Gazole}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#e8e52e" }}
+                    id="Gazole"
+                    value="Gazole"
+                  />
+                }
+                label="Gazole"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.SP95E10}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#5cb94b" }}
+                    id="SP95E10"
+                    value="SP95E10"
+                  />
+                }
+                label="SP95-E10"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.SP95}
+                    color="default"
+                    style={{ color: "#214a24" }}
+                    onChange={handleToggle}
+                    id="SP95"
+                    value="SP95"
+                  />
+                }
+                label="SP95"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.SP98}
+                    color="default"
+                    style={{ color: "#214a24" }}
+                    onChange={handleToggle}
+                    id="SP98"
+                    value="SP98"
+                  />
+                }
+                label="SP98"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.GNV}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#206a94" }}
+                    id="GNV"
+                    value="GNV"
+                  />
+                }
+                label="GPL"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.E85}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#4fc0d4" }}
+                    id="E85"
+                    value="E85"
+                  />
+                }
+                label="Superéthanol E85"
+              />
+            </FormGroup>
+            <Button
+              size="large"
+              variant="contained"
+              id="reset"
+              onClick={handleClick}
+            >
+              Réinitialiser l'application
+            </Button>
+          </SettingsFields>
+        )}
+      </Paper>
     </Container>
   );
 };

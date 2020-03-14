@@ -19,6 +19,7 @@ export const AddressFields = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   @media (max-width: 500px) {
     flex-direction: column;
     align-items: center;
@@ -28,11 +29,17 @@ export const AddressFields = styled.div`
 export const GeolocationFields = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
   @media (max-width: 500px) {
-    flex-direction: column;
     align-items: center;
   }
+`;
+
+export const SettingsFields = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 `;
