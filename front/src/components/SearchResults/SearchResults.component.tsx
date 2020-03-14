@@ -37,7 +37,7 @@ import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { IToggles } from "../../models/Search";
 
-import { format, Locale } from "date-fns";
+import { format } from "date-fns";
 
 interface SearchResultsProps {
   toggles: IToggles;
@@ -373,9 +373,11 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           target="_blank"
                           style={{ color: "black" }}
                         >
-                          {gasStation.adresse}
-                        </a>{" "}
-                        {gasStation.ville} {gasStation.cp}
+                          {formattedCapitalize(gasStation.adresse)}
+                          {", "}
+                          {gasStation.cp}{" "}
+                          {formattedCapitalize(gasStation.ville)}
+                        </a>
                       </TableCell>
                       <TableCell>
                         {gasStation.services.service.map(service => (
@@ -411,13 +413,19 @@ const LabelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs) =>
 
 const getFormattedDate: Function = (ISODate: string): JSX.Element => (
   <div style={{ fontSize: "0.8em", fontStyle: "italic" }}>
-    {format(
-      new Date(ISODate),
-      "dd/MM/yy' \
-                                 à 'kk:mm"
-    )}
+    {format(new Date(ISODate), "dd/MM/yy' à 'kk:mm")}
   </div>
 );
+
+const formattedCapitalize: Function = (stringToFormat: string): string =>
+  stringToFormat
+    .toLowerCase()
+    .split(" ")
+    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(" ")
+    .split("-")
+    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+    .join("-");
 
 const getService: Function = (service: string): JSX.Element => {
   switch (service) {
