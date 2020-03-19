@@ -144,6 +144,8 @@ const GasStationSchema: Schema = new Schema<IGasStation>({
   lastUpdate: LastUpdateFuelsSchema,
 });
 
+GasStationSchema.index({ location: "2dsphere" });
+
 const GasStation = mongoose.model<IGasStation>("GasStation", GasStationSchema);
 
 export default GasStation;
