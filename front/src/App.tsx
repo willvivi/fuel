@@ -50,6 +50,7 @@ const App: React.FC = () => {
         .then((results: IGasStation[]) => {
           handleVariantSnackBar("Résultats mis à jour", "success");
           setSearch({ ...search, results: results });
+          setToggles({ ...toggles, distance: true });
         })
         .catch(() => {
           handleVariantSnackBar(
@@ -71,6 +72,7 @@ const App: React.FC = () => {
             .then((results: IGasStation[]) => {
               handleVariantSnackBar("Résultats mis à jour", "success");
               setSearch({ ...search, results: results });
+              setToggles({ ...toggles, distance: false });
             })
             .catch(() => {
               handleVariantSnackBar(

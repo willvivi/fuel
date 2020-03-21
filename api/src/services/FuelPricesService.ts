@@ -28,15 +28,22 @@ export const getFuelPricesAround = async (
   radius: number
 ): Promise<IGasStation[]> => {
   return new Promise((resolve, reject) => {
-    GasStation.find(
-      {
-        location: {
-          $geoWithin: {
-            $centerSphere: [location, radius / 6378.1],
+    GasStation.aggregate(
+      [
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: location,
+            },
+            maxDistance: radius * 1000,
+            spherical: false,
+            distanceField: "distance",
+            distanceMultiplier: 0.001,
           },
         },
-      },
-      (err, res) => {
+      ],
+      (err: any, res: any) => {
         if (err) {
           console.error(err);
           reject("Could not retrieve points / Coordinates out of range");

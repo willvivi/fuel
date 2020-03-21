@@ -35,6 +35,7 @@ import LocalBarIcon from "@material-ui/icons/LocalBar";
 import BathtubIcon from "@material-ui/icons/Bathtub";
 import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Place from "@material-ui/icons/Place";
 import { IToggles } from "../../models/Search";
 
 import { format } from "date-fns";
@@ -80,7 +81,7 @@ function getSorting<K extends keyof any>(
 
 interface HeadCell {
   id: string;
-  label: string;
+  label: string | JSX.Element;
   show: boolean;
 }
 
@@ -107,8 +108,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       label: "Station",
       show: true,
     },
+    { id: "distance", label: <Place />, show: props.toggles.distance },
     { id: "gazole", label: "Gazole", show: props.toggles.Gazole },
-
     { id: "sp95E10", label: "SP95-E10", show: props.toggles.SP95E10 },
     { id: "sp95", label: "SP95", show: props.toggles.SP95 },
     { id: "sp98", label: "SP98", show: props.toggles.SP98 },
@@ -259,6 +260,11 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.marque !== gasStation.nom &&
                           " - " + gasStation.marque}
                       </TableCell>
+                      {props.toggles.distance && gasStation.distance && (
+                        <TableCell>
+                          {gasStation.distance.toFixed(2) + " km"}
+                        </TableCell>
+                      )}
                       {props.toggles.Gazole && (
                         <TableCell
                           className={

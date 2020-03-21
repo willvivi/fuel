@@ -47,6 +47,7 @@ export interface IGasStation extends Document, IFuels {
   adresse: string;
   ville: string;
   services: IServices;
+  distance?: number;
 }
 
 export interface IGasStationSource extends IGasStation {

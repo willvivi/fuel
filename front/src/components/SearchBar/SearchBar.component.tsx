@@ -12,7 +12,6 @@ import ISearch, {
   initialIToggles,
 } from "../../models/Search";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -20,7 +19,7 @@ import { VariantType, useSnackbar } from "notistack";
 
 import MyLocation from "@material-ui/icons/MyLocation";
 import Search from "@material-ui/icons/Search";
-import Settings from "@material-ui/icons/Settings";
+import LocalGasStation from "@material-ui/icons/LocalGasStation";
 
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,7 +40,7 @@ const useStyles = makeStyles({
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const [search, setSearch] = useState<ISearch>(initialISearch);
   const [toggles, setToggles] = useState<IToggles>(initialIToggles);
-  const [currentTab, setCurrentTab] = useState<number>(0);
+  const [currentTab, setCurrentTab] = useState<number>(1);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 
@@ -151,7 +150,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         >
           <Tab icon={<Search />} label="Recherche" />
           <Tab icon={<MyLocation />} label="Autour" />
-          <Tab icon={<Settings />} label="Affichage" />
+          <Tab icon={<LocalGasStation />} label="Carburants" />
         </Tabs>
         {currentTab === 0 && (
           <AddressFields>

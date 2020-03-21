@@ -38,6 +38,7 @@ export interface IGasStation extends IFuels {
   adresse: string;
   ville: string;
   services: IServices;
+  distance: number;
 }
 
 export default IGasStation;

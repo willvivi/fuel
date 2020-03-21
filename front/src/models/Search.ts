@@ -7,6 +7,7 @@ export interface IToggles {
   SP98: boolean;
   GNV: boolean;
   E85: boolean;
+  distance: boolean;
 }
 interface ISearch {
   city: string;
@@ -33,6 +34,7 @@ export const initialIToggles: IToggles = {
   SP98: false,
   GNV: false,
   E85: false,
+  distance: true,
 };
 
 export default ISearch;
