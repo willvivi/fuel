@@ -1,0 +1,86 @@
+version: "3"
+
+services:
+  front:
+    image: "node_front_fuel_prod:latest"
+    build:
+      context: "./front"
+      dockerfile: Prod.Dockerfile
+    environment:
+      - NODE_ENV=production
+    working_dir: /home/node/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    networks:
+      - internal
+  server:
+    image: "node_api_fuel_prod:latest"
+    build:
+      context: "./api"
+      dockerfile: Prod.Dockerfile
+    user: node
+    environment:
+      - NODE_ENV=production
+    command: "node dist/index.js"
+    working_dir: /home/node/app
+    ports:
+      - "3000:8080"
+    networks:
+      - internal
+    depends_on:
+      - mongo
+  cron:
+    image: "node_cron_fuel_prod:latest"
+    build:
+      context: "./cron"
+      dockerfile: Prod.Dockerfile
+    user: node
+    environment:
+      - NODE_ENV=production
+    command: "node dist/index.js"
+    working_dir: /home/node/app
+    networks:
+      - internal
+    depends_on:
+      - mongo
+  mongo:
+    image: andresvidal/rpi3-mongodb3
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_DATABASE=fuel
+    volumes:
+      - "mongodb_data:/data/db"
+    ports:
+      - 27017:27017
+    networks:
+      - internal
+  nginx:
+    image: nginx:latest
+    command: '/bin/sh -c ''envsubst < /etc/nginx/conf.d/app.conf > /etc/nginx/conf.d/default.conf && while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - internal
+    depends_on:
+      - front
+      - server
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - internal
+networks:
+  internal:
+volumes:
+  mongodb_data:
+    driver: local
