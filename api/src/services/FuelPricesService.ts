@@ -37,7 +37,7 @@ export const getFuelPricesAround = async (
               coordinates: location,
             },
             maxDistance: radius * 1000,
-            spherical: false,
+            spherical: true,
             distanceField: "distance",
             distanceMultiplier: 0.001,
           },
