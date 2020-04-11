@@ -168,9 +168,9 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 };
               }
             );
-            GasStation.insertMany(gasStationsWithGeoJSONAndNames, (err) => {
-              if (err !== null) {
-                console.error("err ", err);
+            GasStation.insertMany(gasStationsWithGeoJSONAndNames, (error) => {
+              if (error !== null) {
+                console.error("err ", error);
                 reject("Database update failed.");
               }
               resolve("Database successfully updated");
