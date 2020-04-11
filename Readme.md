@@ -1,11 +1,17 @@
-# Fuel Project
+# Fuel (Faire de l'Essence)
 
-This project aims to provide a simple way to get detailed information about Gas Stations in France.
+Website providing a simple way to get detailed information (prices, services...) about Gas Stations in France with daily updates.
+
 <https://www.fairedelessence.com>
+
+
+Data provided by the French Government website under the "Open Data" licence:
+
+<https://www.prix-carburants.gouv.fr/rubrique/opendata/>
 
 ## Project status
 
-Straightforward API built on Node with TypeScript and Express.js / Mongoose.
+Straightforward REST API built on Node with TypeScript and Express.js / Mongoose.
 Front built with TypeScript, React.JS.
 
 ## Instructions
