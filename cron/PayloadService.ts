@@ -18,10 +18,13 @@ const getCurrentDate = (): string => {
   const currentDay =
     date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   const currentMonth =
-    date.getMonth() + 1 < 10 ? "0" + date.getMonth() + 1 : date.getMonth() + 1;
+    date.getMonth() + 1 < 10
+      ? "0" + (date.getMonth() + 1)
+      : date.getMonth() + 1;
   const currentYear = date.getFullYear();
+  const currentTime = `${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
 
-  return `${currentYear}${currentDay}${currentMonth}`;
+  return `${currentMonth}-${currentDay}-${currentYear}_${currentTime}`;
 };
 
 const path = `./assets/fuel${getCurrentDate()}.zip`;
@@ -42,10 +45,10 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
       responseType: "stream",
       url,
     })
-      .then(response => {
+      .then((response) => {
         response.data.pipe(master);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         reject("Couldn't fetch xml payload from prix-carburants.gouv.fr");
       });
@@ -72,11 +75,11 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
         );
       }
       xml2Object()
-        .then(gasStations => {
+        .then((gasStations) => {
           console.log(
             "Dropping any existing data from gasstation collection..."
           );
-          GasStation.deleteMany({}, err => {
+          GasStation.deleteMany({}, (err) => {
             if (err !== null) {
               console.error(err);
               reject("Failed to empty collection");
@@ -87,7 +90,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
             );
             const gasStationsWithGeoJSONAndNames = gasStations.map(
               (gasStation: IGasStationSource) => {
-                const name = stations_2018.find(station => {
+                const name = stations_2018.find((station) => {
                   return parseInt(gasStation.id, 10) === station.id;
                 });
 
@@ -151,8 +154,12 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                   marque: name ? name.Marque : "",
                   location: {
                     coordinates: [
-                      parseInt(gasStation.latitude, 10) / 100000,
-                      parseInt(gasStation.longitude, 10) / 100000,
+                      isNaN(parseInt(gasStation.latitude, 10))
+                        ? 0
+                        : parseInt(gasStation.latitude, 10) / 100000,
+                      isNaN(parseInt(gasStation.longitude, 10))
+                        ? 0
+                        : parseInt(gasStation.longitude, 10) / 100000,
                     ],
                     type: "Point",
                   },
@@ -161,16 +168,16 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 };
               }
             );
-            GasStation.insertMany(gasStationsWithGeoJSONAndNames, error => {
+            GasStation.insertMany(gasStationsWithGeoJSONAndNames, (err) => {
               if (err !== null) {
-                console.error("err ", error);
+                console.error("err ", err);
                 reject("Database update failed.");
               }
               resolve("Database successfully updated");
             });
           });
         })
-        .catch(err => {
+        .catch((err) => {
           reject("Couldn't parse XML");
         });
     });
