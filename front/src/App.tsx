@@ -7,11 +7,7 @@ import {
 } from "./services/GasStationService";
 import SearchResults from "./components/SearchResults/SearchResults.component";
 import { MainContainer } from "./App.style";
-import ISearch, {
-  initialISearch,
-  IToggles,
-  initialIToggles,
-} from "./models/Search";
+import ISearch, { IToggles, initialIToggles } from "./models/Search";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -20,7 +16,7 @@ import LocalGasStationIcon from "@material-ui/icons/LocalGasStation";
 import { VariantType, useSnackbar } from "notistack";
 
 const App: React.FC = () => {
-  const [search, setSearch] = useState<ISearch>(initialISearch);
+  const [results, setResults] = useState<IGasStation[]>([]);
   const [toggles, setToggles] = useState<IToggles>(initialIToggles);
   const [timeoutObj, setTimeoutObj] = useState<number>(0);
   const { enqueueSnackbar } = useSnackbar();
@@ -49,8 +45,7 @@ const App: React.FC = () => {
       getGasStationsByCoordinates(search)
         .then((results: IGasStation[]) => {
           handleVariantSnackBar("Résultats mis à jour", "success");
-          setSearch({ ...search, results: results });
-          setToggles({ ...toggles, distance: true });
+          setResults(results);
         })
         .catch(() => {
           handleVariantSnackBar(
@@ -71,8 +66,7 @@ const App: React.FC = () => {
           getGasStationsByAddress(search)
             .then((results: IGasStation[]) => {
               handleVariantSnackBar("Résultats mis à jour", "success");
-              setSearch({ ...search, results: results });
-              setToggles({ ...toggles, distance: false });
+              setResults(results);
             })
             .catch(() => {
               handleVariantSnackBar(
@@ -81,7 +75,7 @@ const App: React.FC = () => {
               );
             });
         } else {
-          setSearch({ ...search, results: [] });
+          setResults([]);
         }
       }, interval);
       setTimeoutObj(timeout);
@@ -102,8 +96,8 @@ const App: React.FC = () => {
         onChange={handleSearch}
         onChangeToggles={handleToggles}
       ></SearchBar>
-      {search.results.length > 0 && (
-        <SearchResults toggles={toggles} results={search.results} />
+      {results.length > 0 && (
+        <SearchResults toggles={toggles} results={results} />
       )}
     </MainContainer>
   );

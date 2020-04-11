@@ -52,12 +52,15 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     switch (e.currentTarget.id) {
       case "address":
         setSearch({ ...search, location: [], address: e.target.value });
+        setToggles({ ...toggles, distance: false });
         break;
       case "postcode":
         setSearch({ ...search, location: [], postcode: e.target.value });
+        setToggles({ ...toggles, distance: false });
         break;
       case "city":
         setSearch({ ...search, location: [], city: e.target.value });
+        setToggles({ ...toggles, distance: false });
         break;
       case "radius":
         setSearch({
@@ -73,7 +76,10 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   };
 
   const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setToggles({ ...toggles, [e.currentTarget.id]: e.currentTarget.checked });
+    setToggles({
+      ...toggles,
+      [e.currentTarget.id]: e.currentTarget.checked,
+    });
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -82,12 +88,12 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
         handleVariantSnackBar("Récupération de votre position...", "warning");
         navigator.geolocation.getCurrentPosition(
           (position: Position) => {
-            console.log(position);
             setSearch({
               ...initialISearch,
               radius: search.radius,
               location: [position.coords.latitude, position.coords.longitude],
             });
+            setToggles({ ...toggles, distance: true });
           },
           (error: PositionError) => {
             switch (error.code) {
@@ -123,18 +129,18 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   useEffect(() => {
     props.onChange(search);
+  }, [search.address, search.city, search.postcode, search.location]);
+
+  useEffect(() => {
     props.onChangeToggles(toggles);
   }, [
-    search.address,
-    search.city,
-    search.postcode,
-    search.location,
     toggles.E85,
     toggles.GNV,
     toggles.Gazole,
     toggles.SP95,
     toggles.SP95E10,
     toggles.SP98,
+    toggles.distance,
   ]);
 
   return (
