@@ -15,4 +15,4 @@
 - ~~Write tests for the API (TDD unfortunately not applied as I didn't have a clear idea of the features)~~
 - Weird typing on the GasStations Mongoose model on the "city" field, should be `String` but it is mandatory to use `JSON` instead.
 - Use a proper logging solution (eg. Winston) on the PayloadService.
-- ~~Display update dates on fuels ~~
+- ~~Display update dates on fuels~~
