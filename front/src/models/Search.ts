@@ -7,6 +7,7 @@ export interface IToggles {
   SP98: boolean;
   GNV: boolean;
   E85: boolean;
+  distance: boolean;
 }
 interface ISearch {
   city: string;
@@ -14,7 +15,6 @@ interface ISearch {
   postcode: string;
   location: number[];
   radius: number;
-  results: IGasStation[];
 }
 
 export const initialISearch: ISearch = {
@@ -23,7 +23,6 @@ export const initialISearch: ISearch = {
   postcode: "",
   location: [],
   radius: 5,
-  results: [],
 };
 
 export const initialIToggles: IToggles = {
@@ -33,6 +32,7 @@ export const initialIToggles: IToggles = {
   SP98: false,
   GNV: false,
   E85: false,
+  distance: true,
 };
 
 export default ISearch;

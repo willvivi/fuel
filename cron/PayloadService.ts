@@ -7,6 +7,7 @@ import GasStation, {
   IFuel,
   IFuels,
   IGasStationSource,
+  ILastUpdateFuels,
 } from "./models/GasStation";
 import stations_2018 from "./assets/json/stations_2018.json";
 import https from "https";
@@ -17,10 +18,13 @@ const getCurrentDate = (): string => {
   const currentDay =
     date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   const currentMonth =
-    date.getMonth() + 1 < 10 ? "0" + date.getMonth() + 1 : date.getMonth() + 1;
+    date.getMonth() + 1 < 10
+      ? "0" + (date.getMonth() + 1)
+      : date.getMonth() + 1;
   const currentYear = date.getFullYear();
+  const currentTime = `${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
 
-  return `${currentYear}${currentDay}${currentMonth}`;
+  return `${currentMonth}-${currentDay}-${currentYear}_${currentTime}`;
 };
 
 const path = `./assets/fuel${getCurrentDate()}.zip`;
@@ -41,10 +45,10 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
       responseType: "stream",
       url,
     })
-      .then(response => {
+      .then((response) => {
         response.data.pipe(master);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         reject("Couldn't fetch xml payload from prix-carburants.gouv.fr");
       });
@@ -71,11 +75,11 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
         );
       }
       xml2Object()
-        .then(gasStations => {
+        .then((gasStations) => {
           console.log(
             "Dropping any existing data from gasstation collection..."
           );
-          GasStation.deleteMany({}, err => {
+          GasStation.deleteMany({}, (err) => {
             if (err !== null) {
               console.error(err);
               reject("Failed to empty collection");
@@ -86,9 +90,18 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
             );
             const gasStationsWithGeoJSONAndNames = gasStations.map(
               (gasStation: IGasStationSource) => {
-                const name = stations_2018.find(station => {
+                const name = stations_2018.find((station) => {
                   return parseInt(gasStation.id, 10) === station.id;
                 });
+
+                const initialLastUpdateFuels: ILastUpdateFuels = {
+                  gnv: "",
+                  sp95E10: "",
+                  sp95: "",
+                  sp98: "",
+                  e85: "",
+                  gazole: "",
+                };
 
                 const fuels: IFuels = {
                   gnv: 0,
@@ -97,6 +110,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                   sp98: 0,
                   e85: 0,
                   gazole: 0,
+                  lastUpdate: initialLastUpdateFuels,
                 };
 
                 if (Array.isArray(gasStation.prix)) {
@@ -104,21 +118,33 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                     switch (prix.nom) {
                       case "E10":
                         fuels.sp95E10 = prix.valeur;
+                        const datesp95E10 = new Date(prix.maj);
+                        fuels.lastUpdate.sp95E10 = datesp95E10.toISOString();
                         break;
                       case "SP95":
                         fuels.sp95 = prix.valeur;
+                        const datesp95 = new Date(prix.maj);
+                        fuels.lastUpdate.sp95 = datesp95.toISOString();
                         break;
                       case "SP98":
                         fuels.sp98 = prix.valeur;
+                        const datesp98 = new Date(prix.maj);
+                        fuels.lastUpdate.sp98 = datesp98.toISOString();
                         break;
                       case "E85":
                         fuels.e85 = prix.valeur;
+                        const datee85 = new Date(prix.maj);
+                        fuels.lastUpdate.e85 = datee85.toISOString();
                         break;
                       case "Gazole":
                         fuels.gazole = prix.valeur;
+                        const dategazole = new Date(prix.maj);
+                        fuels.lastUpdate.gazole = dategazole.toISOString();
                         break;
                       case "GPLc":
                         fuels.gnv = prix.valeur;
+                        const dategnv = new Date(prix.maj);
+                        fuels.lastUpdate.gnv = dategnv.toISOString();
                         break;
                     }
                   });
@@ -128,8 +154,12 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                   marque: name ? name.Marque : "",
                   location: {
                     coordinates: [
-                      parseInt(gasStation.latitude, 10) / 100000,
-                      parseInt(gasStation.longitude, 10) / 100000,
+                      isNaN(parseInt(gasStation.latitude, 10))
+                        ? 0
+                        : parseInt(gasStation.latitude, 10) / 100000,
+                      isNaN(parseInt(gasStation.longitude, 10))
+                        ? 0
+                        : parseInt(gasStation.longitude, 10) / 100000,
                     ],
                     type: "Point",
                   },
@@ -138,8 +168,8 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 };
               }
             );
-            GasStation.insertMany(gasStationsWithGeoJSONAndNames, error => {
-              if (err !== null) {
+            GasStation.insertMany(gasStationsWithGeoJSONAndNames, (error) => {
+              if (error !== null) {
                 console.error("err ", error);
                 reject("Database update failed.");
               }
@@ -147,7 +177,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
             });
           });
         })
-        .catch(err => {
+        .catch((err) => {
           reject("Couldn't parse XML");
         });
     });

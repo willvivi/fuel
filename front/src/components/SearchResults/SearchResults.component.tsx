@@ -4,7 +4,9 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
+import TablePagination, {
+  LabelDisplayedRowsArgs,
+} from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
@@ -33,7 +35,10 @@ import LocalBarIcon from "@material-ui/icons/LocalBar";
 import BathtubIcon from "@material-ui/icons/Bathtub";
 import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Place from "@material-ui/icons/Place";
 import { IToggles } from "../../models/Search";
+
+import { format } from "date-fns";
 
 interface SearchResultsProps {
   toggles: IToggles;
@@ -76,7 +81,7 @@ function getSorting<K extends keyof any>(
 
 interface HeadCell {
   id: string;
-  label: string;
+  label: string | JSX.Element;
   show: boolean;
 }
 
@@ -103,11 +108,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       label: "Station",
       show: true,
     },
+    { id: "distance", label: <Place />, show: props.toggles.distance },
     { id: "gazole", label: "Gazole", show: props.toggles.Gazole },
-
-    { id: "sp95E10", label: "E10 (SP95)", show: props.toggles.SP95E10 },
-    { id: "sp95", label: "E5 (SP95)", show: props.toggles.SP95 },
-    { id: "sp98", label: "E5 (SP98)", show: props.toggles.SP98 },
+    { id: "sp95E10", label: "SP95-E10", show: props.toggles.SP95E10 },
+    { id: "sp95", label: "SP95", show: props.toggles.SP95 },
+    { id: "sp98", label: "SP98", show: props.toggles.SP98 },
     { id: "e85", label: "E85", show: props.toggles.E85 },
     { id: "gnv", label: "GPL", show: props.toggles.GNV },
     {
@@ -255,6 +260,11 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.marque !== gasStation.nom &&
                           " - " + gasStation.marque}
                       </TableCell>
+                      {props.toggles.distance && gasStation.distance && (
+                        <TableCell>
+                          {gasStation.distance.toFixed(2) + " km"}
+                        </TableCell>
+                      )}
                       {props.toggles.Gazole && (
                         <TableCell
                           className={
@@ -262,12 +272,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.gazole > 0 ? (
-                            gasStation.gazole
+                            gasStation.gazole + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.gazole &&
+                            getFormattedDate(gasStation.lastUpdate.gazole)}
                         </TableCell>
                       )}
                       {props.toggles.SP95E10 && (
@@ -277,12 +289,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.sp95E10 > 0 ? (
-                            gasStation.sp95E10
+                            gasStation.sp95E10 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.sp95E10 &&
+                            getFormattedDate(gasStation.lastUpdate.sp95E10)}
                         </TableCell>
                       )}
                       {props.toggles.SP95 && (
@@ -292,12 +306,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.sp95 > 0 ? (
-                            gasStation.sp95
+                            gasStation.sp95 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.sp95 &&
+                            getFormattedDate(gasStation.lastUpdate.sp95)}
                         </TableCell>
                       )}
                       {props.toggles.SP98 && (
@@ -307,12 +323,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.sp98 > 0 ? (
-                            gasStation.sp98
+                            gasStation.sp98 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.sp98 &&
+                            getFormattedDate(gasStation.lastUpdate.sp98)}
                         </TableCell>
                       )}
                       {props.toggles.E85 && (
@@ -322,12 +340,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.e85 > 0 ? (
-                            gasStation.e85
+                            gasStation.e85 + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.e85 &&
+                            getFormattedDate(gasStation.lastUpdate.e85)}
                         </TableCell>
                       )}
                       {props.toggles.GNV && (
@@ -337,12 +357,14 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           }
                         >
                           {gasStation.gnv > 0 ? (
-                            gasStation.gnv
+                            gasStation.gnv + " €/L"
                           ) : (
                             <span style={{ fontStyle: "italic" }}>
                               Carburant indisp.
                             </span>
                           )}
+                          {gasStation.lastUpdate.gnv &&
+                            getFormattedDate(gasStation.lastUpdate.gnv)}
                         </TableCell>
                       )}
                       <TableCell>
@@ -357,9 +379,11 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           target="_blank"
                           style={{ color: "black" }}
                         >
-                          {gasStation.adresse}
-                        </a>{" "}
-                        {gasStation.ville} {gasStation.cp}
+                          {formattedCapitalize(gasStation.adresse)}
+                          {", "}
+                          {gasStation.cp}{" "}
+                          {formattedCapitalize(gasStation.ville)}
+                        </a>
                       </TableCell>
                       <TableCell>
                         {gasStation.services.service.map(service => (
@@ -381,6 +405,8 @@ const SearchResults: React.FC<SearchResultsProps> = (
         count={props.results.length}
         rowsPerPage={rowsPerPage}
         page={page}
+        labelRowsPerPage="Nb/Page"
+        labelDisplayedRows={LabelDisplayedRows}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
@@ -388,7 +414,24 @@ const SearchResults: React.FC<SearchResultsProps> = (
   );
 };
 
-export default SearchResults;
+const LabelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs) =>
+  `${from}-${to === -1 ? count : to}/${count}`;
+
+const getFormattedDate: Function = (ISODate: string): JSX.Element => (
+  <div style={{ fontSize: "0.8em", fontStyle: "italic" }}>
+    {format(new Date(ISODate), "dd/MM/yy' à 'kk:mm")}
+  </div>
+);
+
+const formattedCapitalize: Function = (stringToFormat: string): string =>
+  stringToFormat
+    .toLowerCase()
+    .split(" ")
+    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(" ")
+    .split("-")
+    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+    .join("-");
 
 const getService: Function = (service: string): JSX.Element => {
   switch (service) {
@@ -448,3 +491,5 @@ const getService: Function = (service: string): JSX.Element => {
       return <HelpOutlineIcon />;
   }
 };
+
+export default SearchResults;

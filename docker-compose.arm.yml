@@ -2,16 +2,12 @@ version: "3"
 
 services:
   front:
-    image: "node_front_fuel:latest"
-    build: "./front"
-    user: node
+    image: "node_front_fuel_prod:latest"
+    build:
+      context: "./front"
+      dockerfile: Prod.Dockerfile
     environment:
-      - NODE_ENV=development
-      - PORT=8080
-    command: "npm start"
-    volumes:
-      - "./front:/home/node/app"
-      - "/home/node/app/node_modules"
+      - NODE_ENV=production
     working_dir: /home/node/app
     ports:
       - "8080:8080"
@@ -20,15 +16,14 @@ services:
     networks:
       - internal
   server:
-    image: "node_api_fuel:latest"
-    build: "./api"
+    image: "node_api_fuel_prod:latest"
+    build:
+      context: "./api"
+      dockerfile: Prod.Dockerfile
     user: node
     environment:
-      - NODE_ENV=development
-    command: "npm run dev"
-    volumes:
-      - "./api:/home/node/app"
-      - "/home/node/app/node_modules"
+      - NODE_ENV=production
+    command: "node dist/index.js"
     working_dir: /home/node/app
     ports:
       - "3000:8080"
@@ -37,22 +32,21 @@ services:
     depends_on:
       - mongo
   cron:
-    image: "node_cron_fuel:latest"
-    build: "./cron"
+    image: "node_cron_fuel_prod:latest"
+    build:
+      context: "./cron"
+      dockerfile: Prod.Dockerfile
     user: node
     environment:
-      - NODE_ENV=development
-    command: "npm run dev"
-    volumes:
-      - "./cron:/home/node/app"
-      - "/home/node/app/node_modules"
+      - NODE_ENV=production
+    command: "node dist/index.js"
     working_dir: /home/node/app
     networks:
       - internal
     depends_on:
       - mongo
   mongo:
-    image: mongo
+    image: andresvidal/rpi3-mongodb3
     restart: unless-stopped
     environment:
       - MONGO_INITDB_DATABASE=fuel

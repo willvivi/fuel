@@ -4,6 +4,7 @@ import {
   AddressFields,
   GeolocationFields,
   StyledTextField,
+  SettingsFields,
 } from "./SearchBar.style";
 import ISearch, {
   initialISearch,
@@ -11,30 +12,55 @@ import ISearch, {
   initialIToggles,
 } from "../../models/Search";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import { VariantType, useSnackbar } from "notistack";
+
+import MyLocation from "@material-ui/icons/MyLocation";
+import Search from "@material-ui/icons/Search";
+import LocalGasStation from "@material-ui/icons/LocalGasStation";
+
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 interface SearchBarProps {
   onChange: (search: ISearch) => void;
   onChangeToggles: (toggles: IToggles) => void;
 }
 
+const useStyles = makeStyles({
+  root: {
+    padding: "10px",
+  },
+});
+
 const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   const [search, setSearch] = useState<ISearch>(initialISearch);
   const [toggles, setToggles] = useState<IToggles>(initialIToggles);
+  const [currentTab, setCurrentTab] = useState<number>(1);
+  const { enqueueSnackbar } = useSnackbar();
+  const classes = useStyles();
+
+  const handleVariantSnackBar = (message: string, variant: VariantType) => {
+    enqueueSnackbar(message, { variant });
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.currentTarget.id) {
       case "address":
         setSearch({ ...search, location: [], address: e.target.value });
+        setToggles({ ...toggles, distance: false });
         break;
       case "postcode":
         setSearch({ ...search, location: [], postcode: e.target.value });
+        setToggles({ ...toggles, distance: false });
         break;
       case "city":
         setSearch({ ...search, location: [], city: e.target.value });
+        setToggles({ ...toggles, distance: false });
         break;
       case "radius":
         setSearch({
@@ -50,22 +76,46 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
   };
 
   const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setToggles({ ...toggles, [e.currentTarget.id]: e.currentTarget.checked });
+    setToggles({
+      ...toggles,
+      [e.currentTarget.id]: e.currentTarget.checked,
+    });
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     switch (e.currentTarget.id) {
       case "geolocation":
-        navigator.geolocation.getCurrentPosition((position: Position) => {
-          setSearch({
-            ...initialISearch,
-            radius: search.radius,
-            location: [position.coords.latitude, position.coords.longitude],
-          });
-        });
+        handleVariantSnackBar("Récupération de votre position...", "warning");
+        navigator.geolocation.getCurrentPosition(
+          (position: Position) => {
+            setSearch({
+              ...initialISearch,
+              radius: search.radius,
+              location: [position.coords.latitude, position.coords.longitude],
+            });
+            setToggles({ ...toggles, distance: true });
+          },
+          (error: PositionError) => {
+            switch (error.code) {
+              case 1:
+                handleVariantSnackBar(
+                  "Vous n'avez pas autorisé la géolocalisation sur votre périphérique",
+                  "error"
+                );
+                break;
+              default:
+                handleVariantSnackBar(
+                  "Erreur inattendue survenue lors de la géolocalisation",
+                  "error"
+                );
+                break;
+            }
+          }
+        );
         break;
       case "reset":
         setSearch(initialISearch);
+        setToggles(initialIToggles);
         break;
       default:
         setSearch(initialISearch);
@@ -73,133 +123,172 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
     }
   };
 
+  const handleTabs = (_: React.ChangeEvent<{}>, newTab: number) => {
+    setCurrentTab(newTab);
+  };
+
   useEffect(() => {
     props.onChange(search);
+  }, [search.address, search.city, search.postcode, search.location]);
+
+  useEffect(() => {
     props.onChangeToggles(toggles);
   }, [
-    search.address,
-    search.city,
-    search.postcode,
-    search.location,
     toggles.E85,
     toggles.GNV,
     toggles.Gazole,
     toggles.SP95,
     toggles.SP95E10,
     toggles.SP98,
+    toggles.distance,
   ]);
 
   return (
     <Container>
-      <span>Recherche</span>
-      <AddressFields>
-        <StyledTextField
-          type="text"
-          id="postcode"
-          label="Code Postal / Dpt"
-          value={search.postcode}
-          onChange={handleChange}
-        />
-        <StyledTextField
-          type="text"
-          id="city"
-          label="Ville"
-          value={search.city}
-          onChange={handleChange}
-        />
-      </AddressFields>
-      <Divider />
-      <span style={{ marginTop: "10px" }}>Géolocalisation</span>
-      <GeolocationFields>
-        <Button variant="contained" id="geolocation" onClick={handleClick}>
-          Localisez-moi !
-        </Button>
-        <StyledTextField
-          type="number"
-          label="Distance max. (km)"
-          id="radius"
-          value={search.radius}
-          onChange={handleChange}
-        />
-        <Button
-          color="secondary"
-          variant="contained"
-          id="reset"
-          onClick={handleClick}
+      <Paper square className={classes.root}>
+        <Tabs
+          value={currentTab}
+          onChange={handleTabs}
+          variant="fullWidth"
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="icon label tabs example"
         >
-          Réinitialiser
-        </Button>{" "}
-      </GeolocationFields>
-      <Divider />
-      <span style={{ marginTop: "10px" }}>Affichage</span>
-      <FormGroup row>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.Gazole}
-              onChange={handleToggle}
-              id="Gazole"
-              value="Gazole"
+          <Tab icon={<Search />} label="Recherche" />
+          <Tab icon={<MyLocation />} label="Autour" />
+          <Tab icon={<LocalGasStation />} label="Carburants" />
+        </Tabs>
+        {currentTab === 0 && (
+          <AddressFields>
+            <StyledTextField
+              type="text"
+              id="postcode"
+              label="Département ou CP"
+              value={search.postcode}
+              onChange={handleChange}
             />
-          }
-          label="Gazole"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.SP95E10}
-              onChange={handleToggle}
-              id="SP95E10"
-              value="SP95E10"
+            <StyledTextField
+              type="text"
+              id="city"
+              label="Ville"
+              value={search.city}
+              onChange={handleChange}
             />
-          }
-          label="SP95-E10"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.SP95}
-              onChange={handleToggle}
-              id="SP95"
-              value="SP95"
-            />
-          }
-          label="SP95"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.SP98}
-              onChange={handleToggle}
-              id="SP98"
-              value="SP98"
-            />
-          }
-          label="SP98"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.GNV}
-              onChange={handleToggle}
-              id="GNV"
-              value="GNV"
-            />
-          }
-          label="GPL"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={toggles.E85}
-              onChange={handleToggle}
-              id="E85"
-              value="E85"
-            />
-          }
-          label="E85"
-        />
-      </FormGroup>
+          </AddressFields>
+        )}
+        {currentTab === 1 && (
+          <GeolocationFields>
+            <StyledTextField
+              type="number"
+              label="Distance max. (km)"
+              id="radius"
+              value={search.radius}
+              onChange={handleChange}
+            />{" "}
+            <Button
+              color="primary"
+              variant="contained"
+              id="geolocation"
+              onClick={handleClick}
+              size="medium"
+            >
+              Localisez-moi !
+            </Button>
+          </GeolocationFields>
+        )}
+        {currentTab === 2 && (
+          <SettingsFields>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.Gazole}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#e8e52e" }}
+                    id="Gazole"
+                    value="Gazole"
+                  />
+                }
+                label="Gazole"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.SP95E10}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#5cb94b" }}
+                    id="SP95E10"
+                    value="SP95E10"
+                  />
+                }
+                label="SP95-E10"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.SP95}
+                    color="default"
+                    style={{ color: "#214a24" }}
+                    onChange={handleToggle}
+                    id="SP95"
+                    value="SP95"
+                  />
+                }
+                label="SP95"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.SP98}
+                    color="default"
+                    style={{ color: "#214a24" }}
+                    onChange={handleToggle}
+                    id="SP98"
+                    value="SP98"
+                  />
+                }
+                label="SP98"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.GNV}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#206a94" }}
+                    id="GNV"
+                    value="GNV"
+                  />
+                }
+                label="GPL"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={toggles.E85}
+                    onChange={handleToggle}
+                    color="default"
+                    style={{ color: "#4fc0d4" }}
+                    id="E85"
+                    value="E85"
+                  />
+                }
+                label="Superéthanol E85"
+              />
+            </FormGroup>
+            <Button
+              size="large"
+              variant="contained"
+              id="reset"
+              onClick={handleClick}
+            >
+              Réinitialiser l'application
+            </Button>
+          </SettingsFields>
+        )}
+      </Paper>
     </Container>
   );
 };
