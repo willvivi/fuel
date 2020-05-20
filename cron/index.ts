@@ -2,11 +2,11 @@ import downloadAndExtractPayload from "./PayloadService";
 import mongoose from "mongoose";
 
 const dbURL: string =
-  "mongodb://mongo" +
+  "mongodb://" +
   process.env.DB_USER +
-  "@" +
+  ":" +
   process.env.DB_PASSWORD +
-  ":27017/fuel";
+  "@mongo:27017/fuel";
 
 const date = new Date();
 

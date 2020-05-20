@@ -7,11 +7,11 @@ const app = express();
 const port = 8080 || process.env.PORT;
 
 const dbURL: string =
-  "mongodb://mongo" +
+  "mongodb://" +
   process.env.DB_USER +
-  "@" +
+  ":" +
   process.env.DB_PASSWORD +
-  ":27017/fuel";
+  "@mongo:27017/fuel";
 
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
