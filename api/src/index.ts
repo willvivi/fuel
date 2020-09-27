@@ -6,12 +6,14 @@ import FuelPricesRoutes from "./routes/FuelPricesRoutes";
 const app = express();
 const port = 8080 || process.env.PORT;
 
-const dbURL: string =
-  "mongodb://" +
-  process.env.DB_USER +
-  ":" +
-  process.env.DB_PASSWORD +
-  "@mongo:27017/fuel";
+// const dbURL: string =
+//   "mongodb://" +
+//   process.env.DB_USER +
+//   ":" +
+//   process.env.DB_PASSWORD +
+//   "@mongo:27017/fuel";
+
+const dbURL: string = "mongodb://mongo:27017/fuel";
 
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
