@@ -87,7 +87,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
       case "geolocation":
         handleVariantSnackBar("Récupération de votre position...", "warning");
         navigator.geolocation.getCurrentPosition(
-          (position: Position) => {
+          (position: GeolocationPosition) => {
             setSearch({
               ...initialISearch,
               radius: search.radius,
@@ -95,7 +95,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             });
             setToggles({ ...toggles, distance: true });
           },
-          (error: PositionError) => {
+          (error: GeolocationPositionError) => {
             switch (error.code) {
               case 1:
                 handleVariantSnackBar(

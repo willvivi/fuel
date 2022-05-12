@@ -168,13 +168,14 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 };
               }
             );
-            GasStation.insertMany(gasStationsWithGeoJSONAndNames, (error) => {
-              if (error !== null) {
-                console.error("err ", error);
-                reject("Database update failed.");
-              }
-              resolve("Database successfully updated");
-            });
+            GasStation.insertMany(gasStationsWithGeoJSONAndNames)
+              .then(() => {
+                resolve("Database successfully updated");
+              })
+              .catch((err: any) => {
+                console.log(err);
+                reject("Database update failed");
+              });
           });
         })
         .catch((err) => {

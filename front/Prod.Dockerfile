@@ -1,4 +1,4 @@
-FROM nginx:1.17.8-alpine
+FROM nginx:1.21.6-alpine
 WORKDIR /home/app
 COPY ./ .
 RUN apk add --update g++ make nodejs npm python python-dev

@@ -15,10 +15,7 @@ const port = 8080 || process.env.PORT;
 
 const dbURL: string = "mongodb://mongo:27017/fuel";
 
-mongoose.connect(dbURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(dbURL);
 
 mongoose.connection.on("open", () => {
   console.log("db open");

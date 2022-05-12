@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:16.15.0
 ENV NODE_ENV development
 WORKDIR /home/node/app
 COPY package*.json ./

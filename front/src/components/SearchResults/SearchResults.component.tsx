@@ -6,7 +6,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination, {
   LabelDisplayedRowsArgs,
-} from "@material-ui/core/TablePagination";
+} from "@mui/material/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
@@ -39,6 +39,7 @@ import Place from "@material-ui/icons/Place";
 import { IToggles } from "../../models/Search";
 
 import { format } from "date-fns";
+import { TableFooter } from "@mui/material";
 
 interface SearchResultsProps {
   toggles: IToggles;
@@ -62,7 +63,7 @@ function stableSort<T>(array: T[], cmp: (a: T, b: T) => number) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  return stabilizedThis.map(el => el[0]);
+  return stabilizedThis.map((el) => el[0]);
 }
 
 type Order = "asc" | "desc";
@@ -96,11 +97,10 @@ interface EnhancedTableProps {
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { classes, order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property: string) => (
-    event: React.MouseEvent<unknown>
-  ) => {
-    onRequestSort(event, property);
-  };
+  const createSortHandler =
+    (property: string) => (event: React.MouseEvent<unknown>) => {
+      onRequestSort(event, property);
+    };
 
   const headCells: HeadCell[] = [
     {
@@ -127,7 +127,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         {headCells.map(
-          headCell =>
+          (headCell) =>
             headCell.show && (
               <TableCell
                 key={headCell.id}
@@ -386,7 +386,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                         </a>
                       </TableCell>
                       <TableCell>
-                        {gasStation.services.service.map(service => (
+                        {gasStation.services.service.map((service) => (
                           <Tooltip title={service}>
                             {getService(service)}
                           </Tooltip>
@@ -396,20 +396,29 @@ const SearchResults: React.FC<SearchResultsProps> = (
                   );
                 })}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                  colSpan={3}
+                  count={props.results.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "rows per page",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  // ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </div>
       </Paper>
-      <TablePagination
-        rowsPerPageOptions={[25, 50, 100, 500]}
-        component="div"
-        count={props.results.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        labelRowsPerPage="Nb/Page"
-        labelDisplayedRows={LabelDisplayedRows}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
     </div>
   );
 };
@@ -427,10 +436,10 @@ const formattedCapitalize: Function = (stringToFormat: string): string =>
   stringToFormat
     .toLowerCase()
     .split(" ")
-    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
     .join(" ")
     .split("-")
-    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
     .join("-");
 
 const getService: Function = (service: string): JSX.Element => {
