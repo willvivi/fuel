@@ -1,41 +1,46 @@
 import React from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination, {
-  LabelDisplayedRowsArgs,
-} from "@mui/material/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Paper from "@material-ui/core/Paper";
-import Tooltip from "@material-ui/core/Tooltip";
+import { createStyles, makeStyles } from "@mui/styles";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Paper,
+  Tooltip,
+} from "@mui/material";
+
+import { Theme } from "@mui/material/styles";
 
 import IGasStation from "../../models/GasStation";
 
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import ChildCareIcon from "@material-ui/icons/ChildCare";
-import BuildIcon from "@material-ui/icons/Build";
-import LocalShippingIcon from "@material-ui/icons/LocalShipping";
-import LocalAtmIcon from "@material-ui/icons/LocalAtm";
-import LocalCarWashIcon from "@material-ui/icons/LocalCarWash";
-import WcIcon from "@material-ui/icons/Wc";
-import DirectionsCarIcon from "@material-ui/icons/DirectionsCar";
-import FastfoodIcon from "@material-ui/icons/Fastfood";
-import AlbumIcon from "@material-ui/icons/Album";
-import EmailIcon from "@material-ui/icons/Email";
-import WifiIcon from "@material-ui/icons/Wifi";
-import EvStationIcon from "@material-ui/icons/EvStation";
-import InvertColorsIcon from "@material-ui/icons/InvertColors";
-import LocalLaundryServiceIcon from "@material-ui/icons/LocalLaundryService";
-import RvHookupIcon from "@material-ui/icons/RvHookup";
-import RestaurantIcon from "@material-ui/icons/Restaurant";
-import LocalBarIcon from "@material-ui/icons/LocalBar";
-import BathtubIcon from "@material-ui/icons/Bathtub";
-import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Place from "@material-ui/icons/Place";
+import {
+  ShoppingCart,
+  ChildCare,
+  Build,
+  LocalShipping,
+  LocalAtm,
+  LocalCarWash,
+  Wc,
+  DirectionsCar,
+  Fastfood,
+  Album,
+  Email,
+  Wifi,
+  EvStation,
+  InvertColors,
+  LocalLaundryService,
+  RvHookup,
+  Restaurant,
+  LocalBar,
+  Bathtub,
+  FormatColorReset,
+  HelpOutline,
+  Place,
+} from "@mui/icons-material";
+
 import { IToggles } from "../../models/Search";
 
 import { format } from "date-fns";
@@ -132,7 +137,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               <TableCell
                 key={headCell.id}
                 align="left"
-                padding="default"
+                padding="normal"
                 sortDirection={orderBy === headCell.id ? order : false}
               >
                 <TableSortLabel
@@ -161,10 +166,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     unavailable: {
       backgroundColor: "#E3E2E2",
-    },
-    root: {
-      width: "100%",
-      overflowX: "scroll",
     },
     paper: {
       width: "100%",
@@ -223,208 +224,200 @@ const SearchResults: React.FC<SearchResultsProps> = (
   };
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <div className={classes.tableWrapper}>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size="small"
-            aria-label="enhanced table"
-          >
-            <EnhancedTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={props.results.length}
-              toggles={props.toggles}
-            />
-            <TableBody>
-              {stableSort<any>(
-                props.results,
-                getSorting<string>(order, orderBy)
-              )
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((gasStation: IGasStation) => {
-                  return (
-                    <TableRow key={gasStation.id}>
+    <Paper className={classes.paper}>
+      <div className={classes.tableWrapper}>
+        <Table
+          className={classes.table}
+          aria-labelledby="tableTitle"
+          size="small"
+          aria-label="enhanced table"
+        >
+          <EnhancedTableHead
+            classes={classes}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            rowCount={props.results.length}
+            toggles={props.toggles}
+          />
+          <TableBody>
+            {stableSort<any>(props.results, getSorting<string>(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((gasStation: IGasStation) => {
+                return (
+                  <TableRow key={gasStation.id}>
+                    <TableCell>
+                      {gasStation.nom ? (
+                        gasStation.nom
+                      ) : (
+                        <span style={{ fontStyle: "italic" }}>Inconnu</span>
+                      )}{" "}
+                      {gasStation.marque &&
+                        gasStation.nom &&
+                        gasStation.marque !== gasStation.nom &&
+                        " - " + gasStation.marque}
+                    </TableCell>
+                    {props.toggles.distance && gasStation.distance && (
                       <TableCell>
-                        {gasStation.nom ? (
-                          gasStation.nom
+                        {gasStation.distance.toFixed(2) + " km"}
+                      </TableCell>
+                    )}
+                    {props.toggles.Gazole && (
+                      <TableCell
+                        className={
+                          gasStation.gazole === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.gazole > 0 ? (
+                          gasStation.gazole + " €/L"
                         ) : (
-                          <span style={{ fontStyle: "italic" }}>Inconnu</span>
-                        )}{" "}
-                        {gasStation.marque &&
-                          gasStation.nom &&
-                          gasStation.marque !== gasStation.nom &&
-                          " - " + gasStation.marque}
+                          <span style={{ fontStyle: "italic" }}>
+                            Indisponible
+                          </span>
+                        )}
+                        {gasStation.lastUpdate.gazole &&
+                          getFormattedDate(gasStation.lastUpdate.gazole)}
                       </TableCell>
-                      {props.toggles.distance && gasStation.distance && (
-                        <TableCell>
-                          {gasStation.distance.toFixed(2) + " km"}
-                        </TableCell>
-                      )}
-                      {props.toggles.Gazole && (
-                        <TableCell
-                          className={
-                            gasStation.gazole === 0 ? classes.unavailable : ""
-                          }
-                        >
-                          {gasStation.gazole > 0 ? (
-                            gasStation.gazole + " €/L"
-                          ) : (
-                            <span style={{ fontStyle: "italic" }}>
-                              Carburant indisp.
-                            </span>
-                          )}
-                          {gasStation.lastUpdate.gazole &&
-                            getFormattedDate(gasStation.lastUpdate.gazole)}
-                        </TableCell>
-                      )}
-                      {props.toggles.SP95E10 && (
-                        <TableCell
-                          className={
-                            gasStation.sp95E10 === 0 ? classes.unavailable : ""
-                          }
-                        >
-                          {gasStation.sp95E10 > 0 ? (
-                            gasStation.sp95E10 + " €/L"
-                          ) : (
-                            <span style={{ fontStyle: "italic" }}>
-                              Carburant indisp.
-                            </span>
-                          )}
-                          {gasStation.lastUpdate.sp95E10 &&
-                            getFormattedDate(gasStation.lastUpdate.sp95E10)}
-                        </TableCell>
-                      )}
-                      {props.toggles.SP95 && (
-                        <TableCell
-                          className={
-                            gasStation.sp95 === 0 ? classes.unavailable : ""
-                          }
-                        >
-                          {gasStation.sp95 > 0 ? (
-                            gasStation.sp95 + " €/L"
-                          ) : (
-                            <span style={{ fontStyle: "italic" }}>
-                              Carburant indisp.
-                            </span>
-                          )}
-                          {gasStation.lastUpdate.sp95 &&
-                            getFormattedDate(gasStation.lastUpdate.sp95)}
-                        </TableCell>
-                      )}
-                      {props.toggles.SP98 && (
-                        <TableCell
-                          className={
-                            gasStation.sp98 === 0 ? classes.unavailable : ""
-                          }
-                        >
-                          {gasStation.sp98 > 0 ? (
-                            gasStation.sp98 + " €/L"
-                          ) : (
-                            <span style={{ fontStyle: "italic" }}>
-                              Carburant indisp.
-                            </span>
-                          )}
-                          {gasStation.lastUpdate.sp98 &&
-                            getFormattedDate(gasStation.lastUpdate.sp98)}
-                        </TableCell>
-                      )}
-                      {props.toggles.E85 && (
-                        <TableCell
-                          className={
-                            gasStation.e85 === 0 ? classes.unavailable : ""
-                          }
-                        >
-                          {gasStation.e85 > 0 ? (
-                            gasStation.e85 + " €/L"
-                          ) : (
-                            <span style={{ fontStyle: "italic" }}>
-                              Carburant indisp.
-                            </span>
-                          )}
-                          {gasStation.lastUpdate.e85 &&
-                            getFormattedDate(gasStation.lastUpdate.e85)}
-                        </TableCell>
-                      )}
-                      {props.toggles.GNV && (
-                        <TableCell
-                          className={
-                            gasStation.gnv === 0 ? classes.unavailable : ""
-                          }
-                        >
-                          {gasStation.gnv > 0 ? (
-                            gasStation.gnv + " €/L"
-                          ) : (
-                            <span style={{ fontStyle: "italic" }}>
-                              Carburant indisp.
-                            </span>
-                          )}
-                          {gasStation.lastUpdate.gnv &&
-                            getFormattedDate(gasStation.lastUpdate.gnv)}
-                        </TableCell>
-                      )}
-                      <TableCell>
-                        <a
-                          rel="noopener noreferrer"
-                          href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
-                            " ",
-                            "+"
-                          )}+${gasStation.ville.replace(" ", "+")}+${
-                            gasStation.cp
-                          }`}
-                          target="_blank"
-                          style={{ color: "black" }}
-                        >
-                          {formattedCapitalize(gasStation.adresse)}
-                          {", "}
-                          {gasStation.cp}{" "}
-                          {formattedCapitalize(gasStation.ville)}
-                        </a>
+                    )}
+                    {props.toggles.SP95E10 && (
+                      <TableCell
+                        className={
+                          gasStation.sp95E10 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.sp95E10 > 0 ? (
+                          gasStation.sp95E10 + " €/L"
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Indisponible
+                          </span>
+                        )}
+                        {gasStation.lastUpdate.sp95E10 &&
+                          getFormattedDate(gasStation.lastUpdate.sp95E10)}
                       </TableCell>
-                      <TableCell>
-                        {gasStation.services.service.map((service) => (
-                          <Tooltip title={service}>
-                            {getService(service)}
-                          </Tooltip>
-                        ))}
+                    )}
+                    {props.toggles.SP95 && (
+                      <TableCell
+                        className={
+                          gasStation.sp95 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.sp95 > 0 ? (
+                          gasStation.sp95 + " €/L"
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Indisponible
+                          </span>
+                        )}
+                        {gasStation.lastUpdate.sp95 &&
+                          getFormattedDate(gasStation.lastUpdate.sp95)}
                       </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={3}
-                  count={props.results.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  // ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </Paper>
-    </div>
+                    )}
+                    {props.toggles.SP98 && (
+                      <TableCell
+                        className={
+                          gasStation.sp98 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.sp98 > 0 ? (
+                          gasStation.sp98 + " €/L"
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Indisponible
+                          </span>
+                        )}
+                        {gasStation.lastUpdate.sp98 &&
+                          getFormattedDate(gasStation.lastUpdate.sp98)}
+                      </TableCell>
+                    )}
+                    {props.toggles.E85 && (
+                      <TableCell
+                        className={
+                          gasStation.e85 === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.e85 > 0 ? (
+                          gasStation.e85 + " €/L"
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Indisponible
+                          </span>
+                        )}
+                        {gasStation.lastUpdate.e85 &&
+                          getFormattedDate(gasStation.lastUpdate.e85)}
+                      </TableCell>
+                    )}
+                    {props.toggles.GNV && (
+                      <TableCell
+                        className={
+                          gasStation.gnv === 0 ? classes.unavailable : ""
+                        }
+                      >
+                        {gasStation.gnv > 0 ? (
+                          gasStation.gnv + " €/L"
+                        ) : (
+                          <span style={{ fontStyle: "italic" }}>
+                            Indisponible
+                          </span>
+                        )}
+                        {gasStation.lastUpdate.gnv &&
+                          getFormattedDate(gasStation.lastUpdate.gnv)}
+                      </TableCell>
+                    )}
+                    <TableCell>
+                      <a
+                        rel="noopener noreferrer"
+                        href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
+                          " ",
+                          "+"
+                        )}+${gasStation.ville.replace(" ", "+")}+${
+                          gasStation.cp
+                        }`}
+                        target="_blank"
+                        style={{ color: "black" }}
+                      >
+                        {formattedCapitalize(gasStation.adresse)}
+                        {", "}
+                        {gasStation.cp} {formattedCapitalize(gasStation.ville)}
+                      </a>
+                    </TableCell>
+                    <TableCell>
+                      {gasStation.services.service.map((service) => (
+                        <Tooltip key={service} title={service}>
+                          {getService(service)}
+                        </Tooltip>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                align="left"
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                colSpan={12}
+                count={props.results.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: {
+                    "aria-label": "rows per page",
+                  },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                // ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+    </Paper>
   );
 };
-
-const LabelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs) =>
-  `${from}-${to === -1 ? count : to}/${count}`;
 
 const getFormattedDate: Function = (ISODate: string): JSX.Element => (
   <div style={{ fontSize: "0.8em", fontStyle: "italic" }}>
@@ -445,59 +438,59 @@ const formattedCapitalize: Function = (stringToFormat: string): string =>
 const getService: Function = (service: string): JSX.Element => {
   switch (service) {
     case "Carburant additivé":
-      return <EvStationIcon />;
+      return <EvStation />;
     case "Boutique alimentaire":
-      return <ShoppingCartIcon />;
+      return <ShoppingCart />;
     case "Station de gonflage":
-      return <AlbumIcon />;
+      return <Album />;
     case "Boutique non alimentaire":
-      return <ShoppingCartIcon />;
+      return <ShoppingCart />;
     case "Services réparation / entretien":
-      return <BuildIcon />;
+      return <Build />;
     case "Piste poids lourds":
-      return <LocalShippingIcon />;
+      return <LocalShipping />;
     case "DAB (Distributeur automatique de billets)":
-      return <LocalAtmIcon />;
+      return <LocalAtm />;
     case "Lavage automatique":
-      return <LocalCarWashIcon />;
+      return <LocalCarWash />;
     case "Lavage manuel":
-      return <LocalCarWashIcon />;
+      return <LocalCarWash />;
     case "Vente de fioul domestique":
-      return <InvertColorsIcon />;
+      return <InvertColors />;
     case "Vente de gaz domestique (Butane, Propane)":
-      return <FormatColorResetIcon />;
+      return <FormatColorReset />;
     case "Toilettes publiques":
-      return <WcIcon />;
+      return <Wc />;
     case "Location de véhicule":
-      return <DirectionsCarIcon />;
+      return <DirectionsCar />;
     case "GNV":
-      return <FormatColorResetIcon />;
+      return <FormatColorReset />;
     case "Restauration à emporter":
-      return <FastfoodIcon />;
+      return <Fastfood />;
     case "Relais colis":
-      return <EmailIcon />;
+      return <Email />;
     case "Wifi":
-      return <WifiIcon />;
+      return <Wifi />;
     case "Automate CB 24/24":
-      return <LocalAtmIcon />;
+      return <LocalAtm />;
     case "Vente d'additifs carburants":
-      return <InvertColorsIcon />;
+      return <InvertColors />;
     case "Aire de camping-cars":
-      return <RvHookupIcon />;
+      return <RvHookup />;
     case "Restauration sur place":
-      return <RestaurantIcon />;
+      return <Restaurant />;
     case "Vente de pétrole lampant":
-      return <InvertColorsIcon />;
+      return <InvertColors />;
     case "Laverie":
-      return <LocalLaundryServiceIcon />;
+      return <LocalLaundryService />;
     case "Espace bébé":
-      return <ChildCareIcon />;
+      return <ChildCare />;
     case "bar":
-      return <LocalBarIcon />;
+      return <LocalBar />;
     case "Douches":
-      return <BathtubIcon />;
+      return <Bathtub />;
     default:
-      return <HelpOutlineIcon />;
+      return <HelpOutline />;
   }
 };
 

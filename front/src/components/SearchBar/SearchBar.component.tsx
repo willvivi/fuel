@@ -11,20 +11,20 @@ import ISearch, {
   IToggles,
   initialIToggles,
 } from "../../models/Search";
-import Button from "@material-ui/core/Button";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import Button from "@mui/material/Button";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { VariantType, useSnackbar } from "notistack";
 
-import MyLocation from "@material-ui/icons/MyLocation";
-import Search from "@material-ui/icons/Search";
-import LocalGasStation from "@material-ui/icons/LocalGasStation";
+import MyLocation from "@mui/icons-material/MyLocation";
+import Search from "@mui/icons-material/Search";
+import LocalGasStation from "@mui/icons-material/LocalGasStation";
 
-import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import Paper from "@mui/material/Paper";
+import { makeStyles } from "@mui/styles";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 interface SearchBarProps {
   onChange: (search: ISearch) => void;
@@ -33,7 +33,7 @@ interface SearchBarProps {
 
 const useStyles = makeStyles({
   root: {
-    padding: "10px",
+    padding: "30px",
   },
 });
 
@@ -145,7 +145,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
 
   return (
     <Container>
-      <Paper square className={classes.root}>
+      <Paper className={classes.root}>
         <Tabs
           value={currentTab}
           onChange={handleTabs}

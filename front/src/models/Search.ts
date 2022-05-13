@@ -1,5 +1,3 @@
-import IGasStation from "../models/GasStation";
-
 export interface IToggles {
   SP95: boolean;
   SP95E10: boolean;
