@@ -33,7 +33,7 @@ interface SearchBarProps {
 
 const useStyles = makeStyles({
   root: {
-    padding: "30px",
+    padding: "10px",
   },
 });
 
