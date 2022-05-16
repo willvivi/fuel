@@ -3,10 +3,7 @@ import mongoose from "mongoose";
 
 describe("PayloadService", () => {
   beforeAll(async () => {
-    await mongoose.connect("mongodb://mongo:27017/fuel", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect("mongodb://mongo:27017/fuel");
   });
 
   it.skip("should return successful database update", async () => {
