@@ -6,6 +6,7 @@ import {
   getGasStationsByCoordinates,
 } from "./services/GasStationService";
 import SearchResults from "./components/SearchResults/SearchResults.component";
+import Map from "./components/Map/Map.component";
 import { MainContainer } from "./App.style";
 import ISearch, { IToggles, initialIToggles } from "./models/Search";
 import AppBar from "@mui/material/AppBar";
@@ -102,7 +103,10 @@ const App: React.FC = () => {
           onChangeToggles={handleToggles}
         ></SearchBar>
         {results.length > 0 && (
-          <SearchResults toggles={toggles} results={results} />
+          <>
+            <Map results={results} />
+            <SearchResults toggles={toggles} results={results} />
+          </>
         )}
       </MainContainer>
     </ThemeProvider>

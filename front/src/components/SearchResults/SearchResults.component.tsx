@@ -367,12 +367,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     <TableCell>
                       <a
                         rel="noopener noreferrer"
-                        href={`https://www.google.com/maps/place/${gasStation.adresse.replace(
-                          " ",
-                          "+"
-                        )}+${gasStation.ville.replace(" ", "+")}+${
-                          gasStation.cp
-                        }`}
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${gasStation.location?.coordinates[0]}%2C${gasStation.location?.coordinates[1]}`}
                         target="_blank"
                         style={{ color: "black" }}
                       >
