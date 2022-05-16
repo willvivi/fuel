@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   margin-bottom: 20px;
-  width: 50%;
+  width: 100%;
 `;
 
 export const StyledMapContainer = styled(MapContainer)`

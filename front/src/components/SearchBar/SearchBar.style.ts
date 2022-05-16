@@ -5,6 +5,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  @media (max-width: 500px) {
+    width: 100%;
+  }
   width: 50%;
   user-select: none;
 `;
