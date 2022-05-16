@@ -52,6 +52,12 @@ interface SearchResultsProps {
 }
 
 function desc<T>(a: T, b: T, orderBy: keyof T) {
+  if (!a[orderBy]) {
+    (a[orderBy] as unknown) = 99;
+  }
+  if (!b[orderBy]) {
+    (b[orderBy] as unknown) = 99;
+  }
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -201,7 +207,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<string>("gazole");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -265,14 +271,16 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     {props.toggles.Gazole && (
                       <TableCell
                         className={
-                          gasStation.gazole === 0 ? classes.unavailable : ""
+                          gasStation.gazole === 0 || gasStation.gazole === 99
+                            ? classes.unavailable
+                            : ""
                         }
                       >
-                        {gasStation.gazole > 0 ? (
+                        {gasStation.gazole !== 0 && gasStation.gazole !== 99 ? (
                           gasStation.gazole + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            Indisponible
+                            0 €/L - Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.gazole &&
@@ -282,14 +290,17 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     {props.toggles.SP95E10 && (
                       <TableCell
                         className={
-                          gasStation.sp95E10 === 0 ? classes.unavailable : ""
+                          gasStation.sp95E10 === 0 || gasStation.sp95E10 === 99
+                            ? classes.unavailable
+                            : ""
                         }
                       >
-                        {gasStation.sp95E10 > 0 ? (
+                        {gasStation.sp95E10 !== 0 &&
+                        gasStation.sp95E10 !== 99 ? (
                           gasStation.sp95E10 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            Indisponible
+                            0 €/L - Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.sp95E10 &&
@@ -299,14 +310,16 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     {props.toggles.SP95 && (
                       <TableCell
                         className={
-                          gasStation.sp95 === 0 ? classes.unavailable : ""
+                          gasStation.sp95 === 0 || gasStation.sp95 === 99
+                            ? classes.unavailable
+                            : ""
                         }
                       >
-                        {gasStation.sp95 > 0 ? (
+                        {gasStation.sp95 !== 0 && gasStation.sp95 !== 99 ? (
                           gasStation.sp95 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            Indisponible
+                            0 €/L - Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.sp95 &&
@@ -316,14 +329,16 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     {props.toggles.SP98 && (
                       <TableCell
                         className={
-                          gasStation.sp98 === 0 ? classes.unavailable : ""
+                          gasStation.sp98 === 0 || gasStation.sp98 === 99
+                            ? classes.unavailable
+                            : ""
                         }
                       >
-                        {gasStation.sp98 > 0 ? (
+                        {gasStation.sp98 !== 0 && gasStation.sp98 !== 99 ? (
                           gasStation.sp98 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            Indisponible
+                            0 €/L - Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.sp98 &&
@@ -333,14 +348,16 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     {props.toggles.E85 && (
                       <TableCell
                         className={
-                          gasStation.e85 === 0 ? classes.unavailable : ""
+                          gasStation.e85 === 0 || gasStation.e85 === 99
+                            ? classes.unavailable
+                            : ""
                         }
                       >
-                        {gasStation.e85 > 0 ? (
+                        {gasStation.e85 !== 0 && gasStation.e85 !== 99 ? (
                           gasStation.e85 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            Indisponible
+                            0 €/L - Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.e85 &&
@@ -350,14 +367,16 @@ const SearchResults: React.FC<SearchResultsProps> = (
                     {props.toggles.GNV && (
                       <TableCell
                         className={
-                          gasStation.gnv === 0 ? classes.unavailable : ""
+                          gasStation.gnv === 0 || gasStation.gnv === 99
+                            ? classes.unavailable
+                            : ""
                         }
                       >
-                        {gasStation.gnv > 0 ? (
+                        {gasStation.gnv !== 0 && gasStation.gnv !== 99 ? (
                           gasStation.gnv + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            Indisponible
+                            0 €/L - Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.gnv &&
@@ -391,7 +410,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
             <TableRow>
               <TablePagination
                 align="left"
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                rowsPerPageOptions={[5, 10, 25, 50]}
                 colSpan={12}
                 count={props.results.length}
                 rowsPerPage={rowsPerPage}

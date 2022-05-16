@@ -7,9 +7,15 @@ export const Container = styled.div`
 `;
 
 export const StyledMapContainer = styled(MapContainer)`
-    height: 300px;
-`
+  height: 300px;
+`;
 export const StyledTooltip = styled(Tooltip)`
-    display: flex;
-    flex-direction: column;
-`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const StyledPopupContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
