@@ -21,10 +21,7 @@ console.log(
   }`
 );
 
-mongoose.connect(dbURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(dbURL);
 
 mongoose.connection.on("open", () => {
   console.log("DB Open");

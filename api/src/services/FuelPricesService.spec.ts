@@ -7,10 +7,7 @@ import { IGasStation } from "../models/GasStation";
 
 describe("FuelPricesService", () => {
   beforeAll(async () => {
-    await mongoose.connect("mongodb://mongo:27017/fuel", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect("mongodb://mongo:27017/fuel");
   });
 
   it("should return gas stations by address", async () => {
@@ -26,7 +23,7 @@ describe("FuelPricesService", () => {
   });
 
   it("should return gas stations from coordinates with a radius of 10km", async () => {
-    const coordinates: number[] = [48.820063, 2.474524];
+    const coordinates: [number, number] = [48.820063, 2.474524];
     const radius: number = 10;
     const result: IGasStation[] = await getFuelPricesAround(
       coordinates,

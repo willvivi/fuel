@@ -79,9 +79,9 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
           console.log(
             "Dropping any existing data from gasstation collection..."
           );
-          GasStation.deleteMany({}, (err) => {
-            if (err !== null) {
-              console.error(err);
+          GasStation.deleteMany({}, (deleteManyError: any) => {
+            if (deleteManyError !== null) {
+              console.error(deleteManyError);
               reject("Failed to empty collection");
             }
             console.log("Dropped gasstations collection successfully.");
@@ -168,16 +168,18 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                 };
               }
             );
-            GasStation.insertMany(gasStationsWithGeoJSONAndNames, (error) => {
-              if (error !== null) {
-                console.error("err ", error);
-                reject("Database update failed.");
-              }
-              resolve("Database successfully updated");
-            });
+            GasStation.insertMany(gasStationsWithGeoJSONAndNames)
+              .then(() => {
+                resolve("Database successfully updated");
+              })
+              .catch((err: any) => {
+                console.log(err);
+                reject("Database update failed");
+              });
           });
         })
         .catch((err) => {
+          console.log(err);
           reject("Couldn't parse XML");
         });
     });

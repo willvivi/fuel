@@ -12,7 +12,7 @@ export const getFuelPricesByAddress = async (
         cp: { $regex: "^" + postcode + ".*", $options: "i" },
         adresse: { $regex: ".*" + address + ".*", $options: "i" },
       },
-      (err, res) => {
+      (err: any, res: any) => {
         if (err) {
           console.error(err);
           reject();
@@ -24,7 +24,7 @@ export const getFuelPricesByAddress = async (
 };
 
 export const getFuelPricesAround = async (
-  location: number[],
+  location: [number, number],
   radius: number
 ): Promise<IGasStation[]> => {
   return new Promise((resolve, reject) => {
