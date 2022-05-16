@@ -79,9 +79,9 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
           console.log(
             "Dropping any existing data from gasstation collection..."
           );
-          GasStation.deleteMany({}, (err) => {
-            if (err !== null) {
-              console.error(err);
+          GasStation.deleteMany({}, (deleteManyError: any) => {
+            if (deleteManyError !== null) {
+              console.error(deleteManyError);
               reject("Failed to empty collection");
             }
             console.log("Dropped gasstations collection successfully.");
@@ -179,6 +179,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
           });
         })
         .catch((err) => {
+          console.log(err);
           reject("Couldn't parse XML");
         });
     });
