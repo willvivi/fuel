@@ -34,11 +34,12 @@ const Map: React.FC<MapProps> = (props: MapProps) => {
                     : "Inconnu"}
                 </div>
                 <ul>
-                  {result.sp95 > 0 && <li>SP95: {result.sp95}€/L</li>}
+                  {result.gazole > 0 && <li>Gazole: {result.gazole}€/L</li>}
                   {result.sp95E10 > 0 && <li>SP95-E10: {result.sp95E10}€/L</li>}
+                  {result.sp95 > 0 && <li>SP95: {result.sp95}€/L</li>}
                   {result.sp98 > 0 && <li>SP98: {result.sp98}€/L</li>}
-                  {result.gnv > 0 && <li>GPL: {result.gnv}€/L</li>}
                   {result.e85 > 0 && <li>E85: {result.e85}€/L</li>}
+                  {result.gnv > 0 && <li>GPL: {result.gnv}€/L</li>}
                 </ul>
                 <a
                   href={`https://www.google.com/maps/dir/?api=1&destination=${result.location?.coordinates[0]}%2C${result.location?.coordinates[1]}`}
