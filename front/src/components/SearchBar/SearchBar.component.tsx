@@ -25,6 +25,7 @@ import Paper from "@mui/material/Paper";
 import { makeStyles } from "@mui/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { Typography } from "@mui/material";
 
 interface SearchBarProps {
   onChange: (search: ISearch) => void;
@@ -288,6 +289,7 @@ const SearchBar: React.FC<SearchBarProps> = (props: SearchBarProps) => {
             </Button>
           </SettingsFields>
         )}
+        <Typography variant="caption" display="block" marginTop={"20px"} textAlign={"center"}>Données fournies par <a target={"_blank"} href="https://www.prix-carburants.gouv.fr/">prix-carburants.gouv.fr</a>. Dernière mise à jour : {new Date(Date.now() - (60 * 60 * 1000)).getHours() + 1}h.</Typography>
       </Paper>
     </Container>
   );

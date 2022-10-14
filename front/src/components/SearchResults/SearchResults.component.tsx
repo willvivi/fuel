@@ -205,7 +205,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
 ) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<string>("gazole");
+  const [orderBy, setOrderBy] = React.useState<string>("sp95E10");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -280,7 +280,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.gazole + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            0 €/L - Indisponible
+                            Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.gazole &&
@@ -300,11 +300,11 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.sp95E10 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            0 €/L - Indisponible
+                            Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.sp95E10 &&
-                          getFormattedDate(gasStation.lastUpdate.sp95E10)}
+                          getFormattedDate(gasStation.lastUpdate.sp95E10)}  
                       </TableCell>
                     )}
                     {props.toggles.SP95 && (
@@ -319,7 +319,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.sp95 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            0 €/L - Indisponible
+                            Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.sp95 &&
@@ -338,7 +338,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.sp98 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            0 €/L - Indisponible
+                            Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.sp98 &&
@@ -357,7 +357,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.e85 + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            0 €/L - Indisponible
+                            Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.e85 &&
@@ -376,7 +376,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
                           gasStation.gnv + " €/L"
                         ) : (
                           <span style={{ fontStyle: "italic" }}>
-                            0 €/L - Indisponible
+                            Indisponible
                           </span>
                         )}
                         {gasStation.lastUpdate.gnv &&
@@ -434,7 +434,7 @@ const SearchResults: React.FC<SearchResultsProps> = (
 };
 
 const getFormattedDate: Function = (ISODate: string): JSX.Element => (
-  <div style={{ fontSize: "0.8em", fontStyle: "italic" }}>
+  <div style={{ fontSize: "0.8em", fontStyle: "italic", color: new Date(ISODate) < new Date(Date.now() - (24 * 60 * 60 * 1000)) && "red" || new Date(ISODate) < new Date(Date.now() - (12 * 60 * 60 * 1000)) && "darkorange" || "darkgreen" }}>
     {format(new Date(ISODate), "dd/MM/yy' à 'kk:mm")}
   </div>
 );
