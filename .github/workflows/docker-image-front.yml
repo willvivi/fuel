@@ -15,4 +15,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . -f ./front/Prod.Dockerfile --tag fuel-front:$(date +%s)
+      working-directory: ./front
+      run: docker build . --file Prod.Dockerfile --tag fuel-front:$(date +%s)
