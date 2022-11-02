@@ -51,8 +51,10 @@
 name: Publish Docker images
 
 on:
-  release:
-    types: [published]
+   pull_request:
+      branches: [ "develop" ]
+   push:
+      branches: [ "develop" ]
 
 jobs:
   push_to_registry:
