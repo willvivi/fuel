@@ -2,10 +2,7 @@ version: "3"
 
 services:
   front:
-    image: "node_front_fuel_prod:latest"
-    build:
-      context: "./front"
-      dockerfile: Prod.Dockerfile
+    image: willvivi/fuel-front:develop
     environment:
       - NODE_ENV=production
     working_dir: /home/node/app
@@ -16,10 +13,7 @@ services:
     networks:
       - internal
   server:
-    image: "node_api_fuel_prod:latest"
-    build:
-      context: "./api"
-      dockerfile: Prod.Dockerfile
+    image: willvivi/fuel-api:develop
     user: node
     environment:
       - NODE_ENV=production
@@ -32,10 +26,7 @@ services:
     depends_on:
       - mongo
   cron:
-    image: "node_cron_fuel_prod:latest"
-    build:
-      context: "./cron"
-      dockerfile: Prod.Dockerfile
+    image: willvivi/fuel-cron:develop
     user: node
     environment:
       - NODE_ENV=production
