@@ -57,7 +57,7 @@ on:
       branches: [ "develop" ]
 
 jobs:
-  push_to_registry:
+  push_to_registry_front:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -70,16 +70,44 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
+      - name: <FRONT> Extract metadata (tags, labels) for Docker
+        id: meta_front
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: my-docker-hub-namespace/my-docker-hub-repository
+          images: willvivi/fuel-front
       
-      - name: Build and push Docker image
+      - name: <API> Extract metadata (tags, labels) for Docker
+        id: meta_api
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: willvivi/fuel-api
+      
+      - name: <CRON> Extract metadata (tags, labels) for Docker
+        id: meta_cron
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: willvivi/fuel-cron
+      
+      - name: <FRONT> Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./front
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta_front.outputs.tags }}
+          labels: ${{ steps.meta_front.outputs.labels }}
+
+      - name: <API> Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: ./api
+          push: true
+          tags: ${{ steps.meta_api.outputs.tags }}
+          labels: ${{ steps.meta_api.outputs.labels }}
+
+      - name: <CRON> Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: ./cron
+          push: true
+          tags: ${{ steps.meta_cron.outputs.tags }}
+          labels: ${{ steps.meta_cron.outputs.labels }}
