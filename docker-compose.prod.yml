@@ -2,7 +2,7 @@ version: "3"
 
 services:
   front:
-    image: willvivi/fuel-front:develop
+    image: willvivi/fuel-front:master
     environment:
       - NODE_ENV=production
     working_dir: /home/node/app
@@ -13,7 +13,7 @@ services:
     networks:
       - internal
   server:
-    image: willvivi/fuel-api:develop
+    image: willvivi/fuel-api:master
     user: node
     environment:
       - NODE_ENV=production
@@ -26,7 +26,7 @@ services:
     depends_on:
       - mongo
   cron:
-    image: willvivi/fuel-cron:develop
+    image: willvivi/fuel-cron:master
     user: node
     environment:
       - NODE_ENV=production
