@@ -92,7 +92,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./front
-          file: Prod.Dockerfile
+          file: ./front/Prod.Dockerfile
           push: true
           tags: ${{ steps.meta_front.outputs.tags }}
           labels: ${{ steps.meta_front.outputs.labels }}
@@ -101,7 +101,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./api
-          file: Prod.Dockerfile
+          file: ./api/Prod.Dockerfile
           push: true
           tags: ${{ steps.meta_api.outputs.tags }}
           labels: ${{ steps.meta_api.outputs.labels }}
@@ -110,7 +110,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./cron
-          file: Prod.Dockerfile
+          file: ./cron/Prod.Dockerfile
           push: true
           tags: ${{ steps.meta_cron.outputs.tags }}
           labels: ${{ steps.meta_cron.outputs.labels }}
