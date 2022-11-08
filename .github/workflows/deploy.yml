@@ -1,0 +1,22 @@
+name: Deploy Fuel on VM
+
+on:
+  workflow_run:
+    workflows: ["Publish Fuel Docker images"]
+    types:
+      - completed
+    branches: ["master"]
+
+jobs:
+  ssh:
+    name: Deploy on ssh
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: ${{ secrets.SSH_SCRIPT }}

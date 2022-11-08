@@ -7,7 +7,7 @@ on:
       branches: [ "develop" , "master" ]
 
 jobs:
-  push_to_registry:
+  build_and_push_to_registry:
     name: Build & Push Fuel Docker images to Docker Hub
     runs-on: ubuntu-latest
     steps:
