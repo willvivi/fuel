@@ -7,8 +7,8 @@ on:
       branches: [ "develop" , "master" ]
 
 jobs:
-  build_and_push_to_registry:
-    name: Build & Push Fuel Docker images to Docker Hub
+  build_and_push_front:
+    name: Build & Push Fuel Front image to Docker Hub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -25,19 +25,7 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: willvivi/fuel-front
-      
-      - name: <API> Extract metadata (tags, labels) for Docker
-        id: meta_api
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: willvivi/fuel-api
-      
-      - name: <CRON> Extract metadata (tags, labels) for Docker
-        id: meta_cron
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: willvivi/fuel-cron
-      
+
       - name: <FRONT> Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
@@ -46,6 +34,25 @@ jobs:
           push: true
           tags: ${{ steps.meta_front.outputs.tags }}
           labels: ${{ steps.meta_front.outputs.labels }}
+          
+  build_and_push_api:
+    name: Build & Push Fuel API image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: <API> Extract metadata (tags, labels) for Docker
+        id: meta_api
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: willvivi/fuel-api
 
       - name: <API> Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -55,6 +62,25 @@ jobs:
           push: true
           tags: ${{ steps.meta_api.outputs.tags }}
           labels: ${{ steps.meta_api.outputs.labels }}
+      
+  build_and_push_cron:
+    name: Build & Push Fuel CRON image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: <CRON> Extract metadata (tags, labels) for Docker
+        id: meta_cron
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: willvivi/fuel-cron
 
       - name: <CRON> Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
