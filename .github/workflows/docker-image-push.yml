@@ -1,10 +1,6 @@
 name: Publish Fuel Docker images
 
 on:
-  pull_request:
-    branches: ["develop"]
-  push:
-    branches: ["develop", "master"]
   workflow_dispatch:
 
 jobs:
