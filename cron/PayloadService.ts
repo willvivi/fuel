@@ -79,7 +79,7 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
           console.log(
             "Dropping any existing data from gasstation collection..."
           );
-          GasStation.deleteMany({}, (deleteManyError: any) => {
+          GasStation.deleteMany({}, async (deleteManyError: any) => {
             if (deleteManyError !== null) {
               console.error(deleteManyError);
               reject("Failed to empty collection");
@@ -165,17 +165,18 @@ const downloadAndExtractLatestPayload = async (): Promise<string> => {
                   },
                   ...gasStation,
                   ...fuels,
+                  adresse: String(gasStation.adresse),
                 };
               }
             );
-            GasStation.insertMany(gasStationsWithGeoJSONAndNames)
-              .then(() => {
-                resolve("Database successfully updated");
-              })
-              .catch((err: any) => {
-                console.log(err);
-                reject("Database update failed");
-              });
+
+            try {
+              await GasStation.insertMany(gasStationsWithGeoJSONAndNames);
+              resolve("Database updated successfully");
+            } catch (e) {
+              console.error(e);
+              reject("Database update failed");
+            }
           });
         })
         .catch((err) => {
